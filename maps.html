@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Badminton Centers and Get Directions</title>
+    <link rel="stylesheet" href="Maps.css">
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD34-MMhYj1Wc7bEgCqOF9e1TJTgA0R-kU&libraries=places&callback=initMap">
+    </script>
+    <style>
+        /* Global Styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin: 20px 0;
+        }
+
+        /* Styling the Map and Iframes */
+        #map {
+            height: 500px;
+            width: 100%;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 2px solid #2c3e50;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        iframe {
+            width: 100%;
+            height: 480px;
+            border: none;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Container for Responsiveness */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Media Queries for Small Screens */
+        @media (max-width: 768px) {
+            #map, iframe {
+                height: 400px;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #map, iframe {
+                height: 300px;
+            }
+
+            h2 {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Nearby Badminton Centers and Directions</h2>
+
+        <!-- Google Maps (for user's location) -->
+        <div id="map"></div>
+
+        <!-- Google My Maps (Iframe for badminton centers) -->
+        <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1TaU6s1CSwf2EDJhqZtJGaQRgAp4p-0A&ehbc=2E312F"></iframe>
+        <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1eSCQf0NL7H1KLFa8h53gSwPHpKL2g3Q&ehbc=2E312F"></iframe>
+        <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1IsmaLnbZG4Tdh7cLCBUL7KK788914h0&ehbc=2E312F"></iframe>
+        <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1e3zW2Zt5NYQZpY8E2FvuMw_4nGoFxxY&ehbc=2E312F"></iframe>
+        <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1EVobgDm0-nuUSWvihqNdcf7Hj7S11oE&ehbc=2E312F"></iframe>
+    </div>
+
+    <script>
+        let map, userMarker, directionsService, directionsRenderer;
+
+        function initMap() {
+            // Initialize the map for user's location
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 37.7749, lng: -122.4194 }, // Default center (San Francisco)
+                zoom: 14
+            });
+
+            // Initialize the directions services
+            directionsService = new google.maps.DirectionsService();
+            directionsRenderer = new google.maps.DirectionsRenderer();
+            directionsRenderer.setMap(map); // Set directions renderer to the visible map
+
+            // Get user's current location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+
+                    // Place a marker at the user's current location
+                    userMarker = new google.maps.Marker({
+                        position: userLocation,
+                        map: map, // Add marker to the visible map
+                        title: 'Your Location'
+                    });
+
+                    // Set the map's center to the user's location
+                    map.setCenter(userLocation);
+                });
+            } else {
+                alert('Geolocation is not supported by your browser.');
+            }
+        }
+    </script>
+
+</body>
+</html>

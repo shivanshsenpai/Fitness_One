@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recipe Suggestions</title>
+    <link rel="stylesheet" href="recipes.css" />
+    <script src="https://kit.fontawesome.com/6c13d4b345.js" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <a href="home.html"><i class="fa-solid fa-arrow-left"></i></a> <h1>Recipe Suggestions</h1>
+
+    <form id="recipeForm">
+      <label for="ingredient1">Select Ingredient 1:</label>
+      <select id="ingredient1" required>
+        <option value="None" selected>None</option>
+        <option value="Rice">Rice</option>
+        
+        <option value="Chicken">Chicken</option>
+        <option value="Egg">Egg</option>
+        <option value="Potato">Potato</option>
+        <option value="Mushroom">Mushroom</option>
+        <option value="Carrot">Carrot</option>
+        <option value="Tofu">Tofu</option>
+        <option value="Milk">Milk</option>
+        <option value="Kidney Beans">Kidney Beans</option>
+        <option value="Chickpea">Chickpea</option>
+        <option value="Arhar Dal">Arhar Dal</option>
+      </select>
+
+      <label for="ingredient2">Select Ingredient 2:</label>
+      <select id="ingredient2" required>
+        <option value="None" selected>None</option>
+        <option value="Rice">Rice</option>
+        <option value="Chicken">Chicken</option>
+        <option value="Egg">Egg</option>
+        <option value="Potato">Potato</option>
+        <option value="Mushroom">Mushroom</option>
+        <option value="Carrot">Carrot</option>
+        <option value="Tofu">Tofu</option>
+        <option value="Milk">Milk</option>
+        <option value="Kidney Beans">Kidney Beans</option>
+        <option value="Chickpea">Chickpea</option>
+        <option value="Arhar Dal">Arhar Dal</option>
+      </select>
+
+      <button type="submit">Get Recipes</button>
+    </form>
+
+    <div id="recipeResults"></div>
+
+    <div id="recipeImage"></div> <!-- Image will be added dynamically -->
+
+    <script src="recipes.js"></script>
+  </body>
+</html>

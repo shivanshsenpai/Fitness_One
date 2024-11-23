@@ -1,0 +1,536 @@
+/* recipes.css */
+
+body {
+    font-family: Arial, sans-serif;
+    /* background-color: #f8f9fa; */
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: white;
+    margin-bottom: 20px;
+}
+
+form {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    display: block;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#recipeResults {
+    margin-top: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: 20px auto;
+}
+
+h2 {
+    color: #007bff;
+    margin-top: 0;
+}
+
+p {
+    color: #555;
+}
+.recipe-list {
+    margin: 10px 0;
+    padding-left: 20px; /* Indent the list */
+}
+
+.recipe-list li {
+    margin-bottom: 10px; /* Space between each recipe */
+    color: #555;
+}
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  /* Body styling */
+  body {
+    /* background-color: #f8f8f8; */
+    background-image: url('bg_4.png');
+    background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+    color: #333;
+    padding: 20px;
+    line-height: 1.6;
+  }
+  
+  /* Main Container */
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+  }
+  
+  /* Form Styling */
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  label {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+  }
+  
+  select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    transition: border-color 0.3s ease;
+  }
+  
+  select:hover,
+  select:focus {
+    border-color: #6c63ff;
+  }
+  
+  /* Submit Button Styling */
+  button[type="submit"] {
+    background-color: #6c63ff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background-color 0.3s ease;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #584cf2;
+  }
+  
+  /* Recipe Results Styling */
+  .recipe-list {
+    list-style: decimal;
+    margin-top: 15px;
+  }
+  
+  h2,
+  h3 {
+    color: #6c63ff;
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+  }
+  
+  .recipe-list li {
+    background-color: #f0f0f0;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-left: 4px solid #6c63ff;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .recipe-list li:hover {
+    background-color: #e2e2e2;
+  }
+  
+  ol {
+    margin-left: 20px;
+  }
+  
+  .recipe-list li ol li {
+    margin-bottom: 5px;
+    padding-left: 15px;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 600px) {
+    body {
+      padding: 10px;
+    }
+  
+    .container {
+      padding: 15px;
+    }
+  
+    h2,
+    h3 {
+      font-size: 1.3rem;
+    }
+  
+    button[type="submit"] {
+      padding: 8px 15px;
+      font-size: 14px;
+    }
+  }
+  
+  /* Dynamic animations for elements */
+  h3 {
+    font-size: 1.4rem;
+    text-transform: uppercase;
+    color: #333;
+    transition: color 0.3s ease;
+  }
+  
+  h3:hover {
+    color: #6c63ff;
+  }
+  
+  /* Footer */
+  footer {
+    text-align: center;
+    margin-top: 30px;
+    color: #888;
+  }
+  
+  footer a {
+    color: #6c63ff;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  footer a:hover {
+    color: #584cf2;
+    text-decoration: underline;
+  }
+  
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  /* Body styling */
+  body {
+    background-color: #f8f8f8;
+    color: #333;
+    padding: 20px;
+    line-height: 1.6;
+  }
+  
+  /* Main Container */
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+  }
+  
+  /* Form Styling */
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  /* Ingredient Label Styling */
+  label {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+  }
+  
+  /* Select Box Styling */
+  select {
+    padding: 12px;
+    background-color: #f0f0f0;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  /* Select box hover and focus effect */
+  select:hover,
+  select:focus {
+    border-color: #6c63ff;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(108, 99, 255, 0.5);
+    outline: none;
+  }
+  
+  /* Submit Button Styling */
+  button[type="submit"] {
+    background-color: #6c63ff;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  /* Button hover effect */
+  button[type="submit"]:hover {
+    background-color: #584cf2;
+    transform: scale(1.05);
+  }
+  
+  /* Recipe Results Styling */
+  .recipe-list {
+    list-style: decimal;
+    margin-top: 15px;
+  }
+  
+  h2,
+  h3 {
+    color: #6c63ff;
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+  }
+  
+  .recipe-list li {
+    background-color: #f0f0f0;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-left: 4px solid #6c63ff;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .recipe-list li:hover {
+    background-color: #e2e2e2;
+  }
+  
+  ol {
+    margin-left: 20px;
+  }
+  
+  .recipe-list li ol li {
+    margin-bottom: 5px;
+    padding-left: 15px;
+  }
+  
+  /* Dynamic animations for elements */
+  h3 {
+    font-size: 1.4rem;
+    text-transform: uppercase;
+    color: #333;
+    transition: color 0.3s ease;
+  }
+  
+  h3:hover {
+    color: #6c63ff;
+  }
+  
+  /* Footer */
+  footer {
+    text-align: center;
+    margin-top: 30px;
+    color: #888;
+  }
+  
+  footer a {
+    color: #6c63ff;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  footer a:hover {
+    color: #584cf2;
+    text-decoration: underline;
+  }
+  
+  /* Select container styling for better layout */
+  .form-group {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  
+  .form-group select {
+    appearance: none;
+    width: 100%;
+    background-color: #f9f9f9;
+    padding: 12px 20px;
+    border-radius: 5px;
+    transition: border-color 0.2s ease-in-out;
+  }
+  
+  /* Adding custom arrow for select dropdown */
+  .form-group::after {
+    content: "▼";
+    font-size: 12px;
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #333;
+  }
+  
+  .form-group select:hover,
+  .form-group select:focus {
+    border-color: #6c63ff;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(108, 99, 255, 0.3);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 600px) {
+    body {
+      padding: 10px;
+    }
+  
+    .container {
+      padding: 15px;
+    }
+  
+    h2,
+    h3 {
+      font-size: 1.3rem;
+    }
+  
+    button[type="submit"] {
+      padding: 8px 15px;
+      font-size: 14px;
+    }
+  }
+  
+
+  /*------------------------------------------------*/
+  /* Recipe card images with border and centering */
+/* Centering and styling recipe images */
+#recipeResults img {
+  display: block;             /* Ensures image is treated as a block-level element */
+  margin: 20px auto;          /* Centers the image horizontally and adds top/bottom spacing */
+  max-width: 100%;            /* Ensures the image fits within its container */
+  height: auto;               /* Keeps the aspect ratio */
+  border: 5px solid #ccc;     /* Adds a solid border around the image */
+  border-radius: 10px;        /* Optional: Adds rounded corners */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Adds a subtle shadow for depth */
+  transition: transform 0.2s, box-shadow 0.2s; /* Smooth transition for hover effect */
+}
+
+#recipeResults img:hover {
+  transform: scale(1.05);     /* Slightly enlarges the image on hover */
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3); /* Darker shadow on hover */
+}
+
+/* Ensures all images are the same size and apply consistent styling */
+#recipeResults img {
+  display: block;
+  margin: 20px auto;
+  width: 250px;              /* Fixed width for uniform size */
+  height: 250px;             /* Fixed height to crop images as needed */
+  object-fit: cover;         /* Ensures images are cropped to fit the container */
+  border: 5px solid #ccc;    /* Adds a consistent border around each image */
+  border-radius: 12px;       /* Rounded corners for a clean look */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); /* Adds a subtle shadow for depth */
+  transition: transform 0.3s, box-shadow 0.3s; /* Smooth transition for hover effects */
+}
+
+/* Hover effect for images */
+#recipeResults img:hover {
+  transform: scale(1.08);    /* Slightly enlarges the image on hover */
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.5); /* A deeper shadow when hovering */
+}
+
+/* Optional: Add a zoom-in cursor to indicate interactivity */
+#recipeResults img:hover {
+  cursor: zoom-in;
+}
+
+/* Styling for the recipe name (h3 or h4 as per your HTML) */
+#recipeResults h3 {
+  margin-top: 20px; /* Adds space above each recipe name */
+  margin-bottom: 10px; /* Adds space below each recipe name */
+  text-align: center; /* Centers the recipe name */
+  font-size: 1.5em; /* Optional: Adjust the size of the recipe name */
+  color: #333; /* Optional: Change the color of the recipe name */
+}
+
+/* Add space between the recipes */
+.recipe {
+  margin-bottom: 40px; /* Adds a gap between each recipe container */
+}
+
+/* General layout for the container of each recipe (if needed) */
+.recipe-container {
+  padding: 20px;
+  border-bottom: 2px solid #ddd; /* Optional: Add a subtle line between recipes */
+}
+
+/* Styling for the recipe name with effects */
+#recipeResults h3 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 1.5em;
+  color: #333;
+  transition: color 0.3s ease, transform 0.3s ease; /* Smooth transition for color and scale */
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Adds a subtle shadow behind the text */
+  cursor: pointer; /* Changes cursor to pointer on hover */
+}
+
+/* Hover effect: Recipe name changes color and scales up slightly */
+#recipeResults h3:hover {
+  color: #584cf2; /* Changes the text color to a tomato red */
+  transform: scale(1.1); /* Slightly increases the size of the text */
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3); /* Increases the shadow on hover */
+}
+
+/* Add space between the recipes */
+.recipe {
+  margin-bottom: 40px;
+}
+
+/* General layout for the container of each recipe */
+.recipe-container {
+  padding: 20px;
+  border-bottom: 2px solid #ddd;
+}

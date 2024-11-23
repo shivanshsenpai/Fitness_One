@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calorie & Protein Calculator</title>
+  <link rel="stylesheet" href="Calorie_calc.css">
+  <script src="https://kit.fontawesome.com/6c13d4b345.js" crossorigin="anonymous"></script>
+  <style>
+ 
+    .container {
+      max-width: 800px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    label, select, input {
+      display: block;
+      margin: 10px 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #100317;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 5px;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #550e8f;
+    }
+    #result {
+      margin-top: 20px;
+    }
+    .unit-toggle {
+      margin: 10px 0;
+    }
+    .unit-group {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="container">
+    
+   <a href="home.html"><i class="fa-solid fa-arrow-left"></i></a> 
+    <h1>Calorie & Protein Calculator</h1>
+    
+    <form id="calorieForm">
+      <label for="age">Age:</label>
+      <input type="number" id="age" name="age" required>
+
+      <!-- Unit toggle for metric or imperial -->
+      <div class="unit-toggle">
+        <label>
+          <input type="radio" name="unit" value="metric" checked onclick="toggleUnits()"> Metric (kg, cm)
+        </label>
+        <label>
+          <input type="radio" name="unit" value="imperial" onclick="toggleUnits()"> Imperial (lbs, feet, inches)
+        </label>
+      </div>
+
+      <!-- Metric inputs -->
+      <div id="metric" class="unit-group">
+        <label for="weightMetric">Weight (kg):</label>
+        <input type="number" id="weightMetric" name="weightMetric" step="0.1">
+
+        <label for="heightMetric">Height (cm):</label>
+        <input type="number" id="heightMetric" name="heightMetric">
+      </div>
+
+      <!-- Imperial inputs -->
+      <div id="imperial" class="unit-group">
+        <label for="weightImperial">Weight (lbs):</label>
+        <input type="number" id="weightImperial" name="weightImperial" step="0.1">
+
+        <label for="heightFeet">Height (feet and inches):</label>
+        <input type="number" id="heightFeet" name="heightFeet" placeholder="Feet">
+        <input type="number" id="heightInches" name="heightInches" placeholder="Inches">
+      </div>
+
+      <label for="activityLevel">Activity Level:</label>
+      <select id="activityLevel" name="activityLevel" required>
+        <option value="sedentary">Sedentary (little to no exercise)</option>
+        <option value="light">Light (1-3 days of exercise per week)</option>
+        <option value="moderate">Moderate (3-5 days of exercise per week)</option>
+        <option value="active">Active (6-7 days of exercise per week)</option>
+        <option value="extremely_active">Extremely Active (physical job + daily exercise)</option>
+      </select>
+
+      <label for="goal">Goal:</label>
+      <select id="goal" name="goal" required>
+        <option value="maintain">Maintain weight</option>
+        <option value="lose">Lose weight</option>
+        <option value="gain">Gain weight</option>
+      </select>
+
+      <button type="button" onclick="calculateCalories()">Calculate</button>
+    </form>
+
+    <div id="result" style="display: none;">
+      <h2>Your Results:</h2>
+      <p id="calories">Calories per day: </p>
+      <p id="protein">Suggested protein intake: </p>
+
+      <label for="dietType">Choose Diet Type:</label>
+      <select id="dietType" name="dietType" required>
+        <option value="vegan">Vegan</option>
+        <option value="combined">Combined</option>
+      </select>
+
+      <button onclick="redirectToDietPlanner()">Generate Diet Plan</button>
+    </div>
+  </div>
+
+  <script>
+    // Toggle between metric and imperial units
+    function toggleUnits() {
+      const unit = document.querySelector('input[name="unit"]:checked').value;
+      document.getElementById('metric').style.display = unit === 'metric' ? 'block' : 'none';
+      document.getElementById('imperial').style.display = unit === 'imperial' ? 'block' : 'none';
+    }
+
+    // Convert imperial to metric
+    function imperialToMetric(weightLbs, heightFeet, heightInches) {
+      const weightKg = weightLbs * 0.453592;
+      const heightCm = (heightFeet * 30.48) + (heightInches * 2.54);
+      return { weightKg, heightCm };
+    }
+
+    function calculateCalories() {
+      let weight, height;
+      const unit = document.querySelector('input[name="unit"]:checked').value;
+
+      if (unit === 'metric') {
+        weight = document.getElementById('weightMetric').value;
+        height = document.getElementById('heightMetric').value;
+      } else {
+        const weightImperial = document.getElementById('weightImperial').value;
+        const heightFeet = document.getElementById('heightFeet').value;
+        const heightInches = document.getElementById('heightInches').value;
+        const { weightKg, heightCm } = imperialToMetric(weightImperial, heightFeet, heightInches);
+        weight = weightKg;
+        height = heightCm;
+      }
+
+      const age = document.getElementById('age').value;
+      const activityLevel = document.getElementById('activityLevel').value;
+      const goal = document.getElementById('goal').value;
+
+      // Calculate Basal Metabolic Rate (BMR)
+      let bmr = 10 * weight + 6.25 * height - 5 * age + 5;  // Mifflin-St Jeor for men
+      let activityMultiplier;
+
+      // Activity level multipliers
+      switch (activityLevel) {
+        case 'sedentary':
+          activityMultiplier = 0.9;
+          break;
+        case 'light':
+          activityMultiplier = 1.175;
+          break;
+        case 'moderate':
+          activityMultiplier = 1.35;
+          break;
+        case 'active':
+          activityMultiplier = 1.525;
+          break;
+        case 'extremely_active':
+          activityMultiplier = 1.7;
+          break;
+      }
+
+      let calorieGoal = bmr * activityMultiplier;
+
+      // Adjust based on user goal
+      if (goal === 'lose') {
+        calorieGoal -= 500;
+      } else if (goal === 'gain') {
+        calorieGoal += 500;
+      }
+
+      // Suggested protein intake
+      const proteinGoal = Math.round(1.3 * weight);
+
+      // Display results
+      document.getElementById('calories').innerText = `Calories per day: ${Math.round(calorieGoal)} kcal`;
+      document.getElementById('protein').innerText = `Suggested protein intake: ${proteinGoal} grams`;
+      document.getElementById('result').style.display = 'block';
+
+      // Store calculated values in dataset attributes
+      document.getElementById('result').dataset.calories = Math.round(calorieGoal);
+      document.getElementById('result').dataset.protein = proteinGoal;
+    }
+
+    function redirectToDietPlanner() {
+      const calorieGoal = document.getElementById('result').dataset.calories;
+      const proteinGoal = document.getElementById('result').dataset.protein;
+      const dietType = document.getElementById('dietType').value;
+
+      // Redirect to dietChart.html with query parameters
+      const url = `dietChart.html?calories=${calorieGoal}&protein=${proteinGoal}&diet=${dietType}`;
+      window.location.href = url;
+    }
+    
+
+    // Initialize the form with metric units displayed
+    toggleUnits();
+  </script>
+</body>
+</html>

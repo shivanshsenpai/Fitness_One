@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0" />
+		<title>Matching Profiles</title>
+		<link
+			rel="stylesheet"
+			href="kl.css" />
+	</head>
+	<body>
+		<div class="container">
+			<h2>Matching Profiles</h2>
+			<div id="profileContainer"></div>
+		</div>
+
+		<script>
+			const profiles = [
+				{id: 1, name: 'Aditi', age: 25, photo: 'img1.jpg', timeSlot: '8AM-9AM'},
+				{
+					id: 2,
+					name: 'Aarav ',
+					age: 28,
+					photo: 'img2.avif',
+					timeSlot: '8AM-9AM',
+				},
+				{
+					id: 3,
+					name: 'Rohan',
+					age: 27,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '8AM-9AM',
+				},
+				{
+					id: 4,
+					name: 'Varun',
+					age: 27,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '8AM-9AM',
+				},
+				{
+					id: 5,
+					name: 'Kavya',
+					age: 28,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '8AM-9AM',
+				},
+				{
+					id: 6,
+					name: 'Karan ',
+					age: 27,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '9AM-10AM',
+				},
+				{
+					id: 7,
+					name: 'Meera',
+					age: 27,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '9AM-10AM',
+				},
+				{
+					id: 8,
+					name: 'Pooja ',
+					age: 27,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '9AM-10AM',
+				},
+				{
+					id: 9,
+					name: 'Arjun',
+					age: 27,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '9AM-10AM',
+				},
+				{
+					id: 10,
+					name: 'Ananya',
+					age: 22,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '10AM-11AM',
+				},
+				{
+					id: 11,
+					name: 'Vikram',
+					age: 22,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '10AM-11AM',
+				},
+				{
+					id: 12,
+					name: 'Sneha',
+					age: 22,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '10AM-11AM',
+				},
+				{
+					id: 13,
+					name: 'Nisha',
+					age: 22,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '11AM-12PM',
+				},
+				{
+					id: 14,
+					name: 'Priya',
+					age: 22,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '11AM-12PM',
+				},
+				{
+					id: 15,
+					name: 'Riya',
+					age: 22,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '11AM-12PM',
+				},
+				{
+					id: 16,
+					name: 'Rahul',
+					age: 22,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '11AM-12PM',
+				},
+				{
+					id: 17,
+					name: 'Siddharth',
+					age: 22,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '12PM-1PM',
+				},
+				{
+					id: 18,
+					name: 'Deepa',
+					age: 22,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '12PM-1PM',
+				},
+				{
+					id: 19,
+					name: 'Sanya',
+					age: 22,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '12PM-1PM',
+				},
+				{
+					id: 20,
+					name: 'Ankit',
+					age: 22,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '1PM-2PM',
+				},
+				{
+					id: 21,
+					name: 'Sameer',
+					age: 22,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '1PM-2PM',
+				},
+				{
+					id: 22,
+					name: 'Aditya',
+					age: 22,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '1PM-2PM',
+				},
+				{
+					id: 23,
+					name: 'Aishwarya',
+					age: 22,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '1PM-2PM',
+				},
+				{
+					id: 24,
+					name: 'Shreya',
+					age: 22,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '2PM-3PM',
+				},
+				{
+					id: 25,
+					name: 'Dhruv',
+					age: 22,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '2PM-3PM',
+				},
+				{
+					id: 26,
+					name: 'Nikhil',
+					age: 22,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '3PM-4PM',
+				},
+				{
+					id: 27,
+					name: 'Mayank ',
+					age: 22,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '3PM-4PM',
+				},
+				{
+					id: 28,
+					name: 'Tanvi ',
+					age: 22,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '3PM-4PM',
+				},
+				{
+					id: 29,
+					name: 'Neha',
+					age: 22,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '4PM-5PM',
+				},
+				{
+					id: 30,
+					name: 'Bhavna',
+					age: 22,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '4PM-5PM',
+				},
+				{
+					id: 31,
+					name: 'Suraj',
+					age: 22,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '4PM-5PM',
+				},
+				{
+					id: 32,
+					name: 'Pavan',
+					age: 22,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '5PM-6PM',
+				},
+				{
+					id: 33,
+					name: 'Rishabh',
+					age: 22,
+					photo: 'https://via.placeholder.com/100',
+					timeSlot: '5PM-6PM',
+				},
+			]
+
+			// Get user info from localStorage
+			const user = JSON.parse(localStorage.getItem('user'))
+
+			const profileContainer = document.getElementById('profileContainer')
+
+			// Function to display matching profiles based on age and time slot
+			function displayMatchingProfiles() {
+				profileContainer.innerHTML = '' // Clear the container
+
+				// Filter profiles based on user preferences
+				const matchedProfiles = profiles.filter((profile) => {
+					return profile.timeSlot === user.timeSlot // You can add more matching logic like age comparison
+				})
+
+				// Show 5 matching profiles (or less if fewer matches)
+				matchedProfiles.slice(0, 5).forEach((profile) => {
+					profileContainer.innerHTML += `
+			                 <div class="profile-card" id="profile-${profile.id}">
+			                     <img src="${profile.photo}" alt="${profile.name}">
+			                     <div class="profile-info">
+			                         <p><strong>${profile.name}</strong></p>
+			                         <p>Age: ${profile.age}</p>
+			                         <p>Time: ${profile.timeSlot}</p>
+			                     </div>
+			                    
+									
+                                    <div class="buttons">
+			                         <button class="like-btn" onclick="likeProfile(${profile.id})">Like</button>
+			                         <button class="dislike-btn" onclick="dislikeProfile(${profile.id})">Dislike</button>
+			                        <a href="https://hack.chat/?(chirag)"> <button class="chat-btn" id="chatBtn-${profile.id}" style="display: none;" onclick="startChat('${profile.name} ${profile.id}')">Chat</button></a>
+			                     </div>
+			                 </div>
+			             `
+				})
+			}
+
+			function likeProfile(id) {
+				// Show the chat button for this profile
+				const chatBtn = document.getElementById(`chatBtn-${id}`)
+				chatBtn.style.display = 'block'
+
+				// Hide all other profiles
+				const profilesToHide = document.querySelectorAll('.profile-card')
+				profilesToHide.forEach((profile) => {
+					if (profile.id !== `profile-${id}`) {
+						profile.style.display = 'none'
+					}
+				})
+			}
+
+			function dislikeProfile(id) {
+				// Hide the disliked profile
+				const profile = document.getElementById(`profile-${id}`)
+				profile.style.display = 'none'
+			}
+
+			// Implement real chat functionality here
+			function startChat(name, id) {
+				// Display chat functionality (e.g., pop up or redirect)
+				alert(`You are now chatting with ${name}!`)
+
+				// Fetch call example (optional based on your logic)
+				fetch('http://127.0.0.1:5000/run-python')
+					.then((response) => {
+						if (!response.ok) {
+							throw new Error('Network response was not ok')
+						}
+						return response.json()
+					})
+					.then((data) => {
+						if (data.result) {
+							document.getElementById('output').innerText = data.result
+						} else if (data.error) {
+							document.getElementById('output').innerText =
+								'Error: ' + data.error
+						}
+					})
+					.catch((error) => console.error('Error:', error))
+			}
+
+			// Display profiles on page load
+			displayMatchingProfiles()
+		</script>
+	</body>
+</html>

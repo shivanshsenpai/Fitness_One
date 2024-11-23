@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diet Plan</title>
+    <link rel="stylesheet" href="dietChart.css">
+</head>
+<body>
+    <h1>Your Weekly Diet Plan</h1>
+
+    <div id="dietPlan"></div>
+    <div id="recipeDisplay" class="recipe"></div>
+    <button id="checkoutRecipes">Checkout Recipes</button>
+
+
+
+    <script>
+        // Parse URL query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const calorieGoal = parseInt(urlParams.get('calories'));
+        const proteinGoal = parseInt(urlParams.get('protein'));
+        const dietType = urlParams.get('diet');
+        
+        const recipes = {
+            'Egg': 'Scrambled eggs: Beat eggs with salt and pepper. Cook in a pan until fluffy.',
+            'Chicken': 'Grilled chicken: Marinate chicken with spices and grill until cooked.',
+            'Potato': 'Mashed potatoes: Boil potatoes, mash them, and mix with butter and salt.',
+            'Mushroom': 'Sautéed mushrooms: Cook mushrooms in a pan with garlic and olive oil.',
+            'Carrot': 'Carrot salad: Grate carrots and mix with lemon juice and salt.',
+            'Beans': 'Bean stew: Cook beans with tomatoes, onions, and spices.',
+            'Paneer': 'Paneer curry: Cook paneer with spices and tomatoes in a pan.',
+            'Tofu': 'Stir-fried tofu: Stir-fry tofu with vegetables and soy sauce.',
+            'Milk': 'Milkshake: Blend milk with fruits and sugar.',
+            'Soy Milk': 'Soy milk smoothie: Blend soy milk with fruits for a refreshing drink.',
+            'Kidney Beans': 'Kidney bean salad: Mix cooked kidney beans with onions and spices.',
+            'Chickpea': 'Chickpea curry: Cook chickpeas with spices and tomatoes.',
+            'Arhar Dal': 'Dal fry: Cook arhar dal with spices and serve with rice.',
+            'Rice': 'Fried rice: Stir-fry cooked rice with vegetables and soy sauce.',
+            'Roti': 'Chapati: Mix whole wheat flour with water, roll out, and cook on a skillet.',
+            'Banana': 'Banana smoothie: Blend banana with milk and honey.'
+        };
+
+        function showRecipe(food) {
+            const recipe = recipes[food];
+            document.getElementById("recipeDisplay").innerHTML = `<strong>Recipe for ${food}:</strong> ${recipe}`;
+        }
+
+        function generateDiet(calorieGoal, proteinGoal, dietType) {
+            const WEIGHT_EGG = 70; // grams
+            const WEIGHT_ROTI = 70; // grams
+            const WEIGHT_BANANA = 70; // grams
+            
+            // Define food items
+            const foods = {
+                vegan: {
+                    vegetables: ['Potato', 'Mushroom', 'Carrot', 'Beans'],
+                    dairyAlternatives: ['Tofu', 'Soy Milk'],
+                    pulses: ['Kidney Beans', 'Chickpea', 'Arhar Dal'],
+                    carbs: ['Rice', 'Roti']
+                },
+                combined: {
+                    nonVeg: ['Egg', 'Chicken'],
+                    vegetables: ['Potato', 'Mushroom', 'Carrot', 'Beans'],
+                    dairy: ['Paneer', 'Tofu', 'Milk'],
+                    pulses: ['Kidney Beans', 'Chickpea', 'Arhar Dal'],
+                    carbs: ['Rice', 'Roti']
+                }
+            };
+
+            // Food calories and protein values
+            const caloriesPer100g = {
+                'Egg': 155,
+                'Chicken': 270,
+                'Potato': 70,
+                'Mushroom': 42,
+                'Carrot': 61,
+                'Beans': 50,
+                'Paneer': 265,
+                'Tofu': 100,
+                'Milk': 80,
+                'Soy Milk': 70,
+                'Kidney Beans': 260,
+                'Chickpea': 180,
+                'Arhar Dal': 380,
+                'Rice': 110,
+                'Roti': 220,
+                'Banana': 100
+            };
+
+            const proteinPer100g = {
+                'Egg': 10,
+                'Chicken': 18,
+                'Potato': 1,
+                'Mushroom': 2,
+                'Carrot': 1,
+                'Beans': 2,
+                'Paneer': 14,
+                'Tofu': 6,
+                'Milk': 3,
+                'Soy Milk': 3,
+                'Kidney Beans': 17,
+                'Chickpea': 6,
+                'Arhar Dal': 17,
+                'Rice': 2.7,
+                'Roti': 3.6,
+                'Banana': 1.1
+            };
+
+            const limits = {
+                'Egg': 400,
+                'Chicken': 400,
+                'Potato': 600,
+                'Mushroom': 600,
+                'Carrot': 600,
+                'Beans': 600,
+                'Paneer': 300,
+                'Tofu': 400,
+                'Milk': 350,
+                'Soy Milk': 350,
+                'Kidney Beans': 320,
+                'Chickpea': 320,
+                'Arhar Dal': 320,
+                'Rice': 350,
+                'Roti': 400,
+                'Banana': 500 // weekly limit
+            };
+
+            const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+            let dietPlan = '';
+            let bananaDays = 0;
+
+            // Select the appropriate food list based on the user's diet preference
+            const selectedFoods = (dietType === 'vegan') ? foods.vegan : foods.combined;
+
+            // Generate diet for each day of the week
+            daysOfWeek.forEach((day, index) => {
+                let dailyCalories = 0;
+                let dailyProtein = 0;
+                let foodTotals = {};
+                let mainItemSelected = false; // Track if a main item has been selected
+
+                // Add rice (up to 350g) and roti (up to 3) to every meal
+                const riceWeight = Math.min(350, Math.floor(Math.random() * 200) + 100);
+                const riceCalories = (caloriesPer100g['Rice'] * riceWeight) / 100;
+                const riceProtein = (proteinPer100g['Rice'] * riceWeight) / 100;
+                dailyCalories += riceCalories;
+                dailyProtein += riceProtein;
+
+                foodTotals['Rice'] = (foodTotals['Rice'] || 0) + riceWeight;
+
+                if (index % 2 === 0) {
+                    const rotiCount = Math.min(2, Math.floor(Math.random() * 3) + 1);
+                    const rotiWeight = rotiCount * 50;
+                    const rotiCalories = caloriesPer100g['Roti'] * rotiCount;
+                    const rotiProtein = proteinPer100g['Roti'] * rotiCount;
+                    dailyCalories += rotiCalories;
+                    dailyProtein += rotiProtein;
+
+                    foodTotals['Roti'] = (foodTotals['Roti'] || 0) + rotiWeight;
+                }
+
+                // Add bananas to at least 4 days of the week
+                if (bananaDays < 4 && Math.random() < 0.5) {
+                    const bananaCount = Math.floor(Math.min(500, (500 - Object.values(foodTotals).reduce((sum, weight) => sum + weight, 0))) / 150);
+                    if (bananaCount > 0) {
+                        const bananaWeight = bananaCount * 150;
+                        const bananaCalories = (caloriesPer100g['Banana'] * bananaWeight) / 100;
+                        const bananaProtein = (proteinPer100g['Banana'] * bananaWeight) / 100;
+                        dailyCalories += bananaCalories;
+                        dailyProtein += bananaProtein;
+
+                        foodTotals['Banana'] = (foodTotals['Banana'] || 0) + bananaWeight;
+                        bananaDays++;
+                    }
+                }
+
+                while (dailyCalories < calorieGoal - 200 || dailyProtein < proteinGoal - 10) {
+                    const foodCategory = Object.keys(selectedFoods)[Math.floor(Math.random() * Object.keys(selectedFoods).length)];
+                    let selectedFood;
+
+                    // Check for main items in pulses and dairy
+                    if (foodCategory === 'pulses' || foodCategory === 'dairy') {
+                        // If a main item is already selected and it's not a vegan diet, skip to the next iteration
+                        if (mainItemSelected && dietType === 'combined') continue;
+                    }
+
+                    selectedFood = selectedFoods[foodCategory][Math.floor(Math.random() * selectedFoods[foodCategory].length)];
+                    const maxLimit = limits[selectedFood] || 600;
+                    const randomWeight = Math.min(maxLimit, Math.floor(Math.random() * 150) + 50);
+                    const foodCalories = (caloriesPer100g[selectedFood] * randomWeight) / 100;
+                    const foodProtein = (proteinPer100g[selectedFood] * randomWeight) / 100;
+
+                    dailyCalories += foodCalories;
+                    dailyProtein += foodProtein;
+
+                    foodTotals[selectedFood] = (foodTotals[selectedFood] || 0) + randomWeight;
+
+                    // Mark as main item selected if it is a main food type
+                    if (selectedFoods.pulses.includes(selectedFood)) {
+                        mainItemSelected = true;
+                    }
+                }
+
+                // Generate HTML for diet table
+                let dietForDay = `<div class="diet-day"><h3>${day}</h3><table><tr><th>Food Item</th><th>Quantity</th><th>Calories</th><th>Protein (g)</th></tr>`;
+                Object.keys(foodTotals).forEach(food => {
+                    const totalWeight = foodTotals[food];
+                    const roundedWeight = Math.ceil(totalWeight / 50) * 50; // Round to nearest 50g
+                    const weightDescription = food === 'Roti' ? `${roundedWeight}g/${roundedWeight / 50} roti` :
+                                              food === 'Egg' ? `${roundedWeight}g/${roundedWeight / 50} egg` :
+                                              food === 'Banana' ? `${roundedWeight}g/${roundedWeight / 150} banana` :
+                                              `${totalWeight}g`;
+
+                    const totalCalories = (caloriesPer100g[food] * totalWeight) / 100;
+                    const totalProtein = (proteinPer100g[food] * totalWeight) / 100;
+
+                    dietForDay += `<tr><td>${food}</td><td>${weightDescription}</td><td>${totalCalories.toFixed(2)}</td><td>${totalProtein.toFixed(2)}</td></tr>`;
+                });
+                dietForDay += `</table><p><strong>Total Calories:</strong> ${dailyCalories.toFixed(2)} kcal</p>`;
+                dietForDay += `<p><strong>Total Protein:</strong> ${dailyProtein.toFixed(2)}g</p></div>`;
+
+                dietPlan += dietForDay;
+            });
+
+           
+
+
+    document.getElementById("dietPlan").innerHTML = dietPlan;
+}
+
+
+        // Call the generateDiet function with calorie and protein goals
+        generateDiet(calorieGoal, proteinGoal, dietType);
+        document.getElementById('checkoutRecipes').addEventListener('click', function() {
+            // Redirect to the recipe suggestions page
+            window.location.href = 'Recipes.html'; // Change this to the actual file name if different
+        });
+    </script>
+</body>
+</html>

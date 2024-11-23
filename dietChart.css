@@ -1,0 +1,215 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #eaeaea; /* Light gray background */
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    color: white;
+    margin-bottom: 20px;
+    font-size: 2.5em;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    border-bottom: 3px solid #2c3e50; /* Underline effect */
+    padding-bottom: 10px;
+}
+
+#dietPlan {
+    width: 90%;
+    max-width: 800px;
+}
+
+.diet-day {
+    margin: 20px 0;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #ffffff, #f9f9f9); /* Subtle gradient */
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.diet-day:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+}
+
+th {
+    background-color: #add8e6; /* Light blue */
+    color: #fff;
+    padding: 12px;
+    border: 1px solid #ccc;
+    text-align: left;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+td {
+    padding: 12px;
+    border: 1px solid #ccc;
+    background-color: #fafafa;
+}
+
+td:nth-child(odd) {
+    background-color: #f9f9f9; /* Light gray for odd cells */
+}
+
+p {
+    margin: 10px 0;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.diet-day:nth-child(even) {
+    background: linear-gradient(135deg, #f0f8ff, #e0f7fa); /* Light cyan gradient for even days */
+}
+
+.diet-day:nth-child(odd) {
+    background: linear-gradient(135deg, #fff3e0, #ffebee); /* Peach gradient for odd days */
+}
+
+.diet-day h3 {
+    color: #3dd2f3; /* Red for day headings */
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2em;
+    }
+    
+    .diet-day {
+        padding: 15px;
+    }
+
+    th, td {
+        padding: 10px;
+    }
+}
+body {
+    /* font-family: 'Arial', sans-serif; */
+    /* background: linear-gradient(to bottom, #e0f7fa, #b3e5fc, #81d4fa, #29b6f6, #0288d1); /* Gradient from light to dark blue */
+    /* color: #333;  */
+   
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh; /* Ensures the gradient covers the full height of the viewport */
+}
+
+#dietPlan {
+    background-color: rgba(255, 255, 255, 0.9); /* White with some transparency */
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 800px; /* Limit the maximum width for better readability */
+    margin: 0 auto; /* Center the diet plan */
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+.diet-day {
+    margin-bottom: 20px;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+body {
+    /* font-family: 'Arial', sans-serif;
+    background: linear-gradient(to bottom, #e0f7fa, #b3e5fc, #81d4fa, #29b6f6, #0288d1); /* Gradient from light to dark blue */
+    /* color: #333;  */
+    background-image: url('bg_3.jpg');
+    background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh; /* Ensures the gradient covers the full height of the viewport */
+}
+
+#dietPlan {
+    background-color: rgba(255, 255, 255, 0.9); /* White with some transparency */
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 800px; /* Limit the maximum width for better readability */
+    margin: 0 auto; /* Center the diet plan */
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+.diet-day {
+    margin-bottom: 20px;
+    border-radius: 5px;
+    padding: 10px;
+    background: linear-gradient(to bottom, #4fc3f7, #bbdefb); /* Gradient from darker to lighter blue */
+    border: 1px solid #0288d1; /* Optional: adds a border around each day's section */
+}
+
+.diet-day h3 {
+    color: #0288d1; /* Optional: change the color of day headings */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse; /* Removes space between table cells */
+}
+
+th, td {
+    padding: 8px;
+    text-align: left; /* Align text to the left */
+    border: 1px solid #0288d1; /* Blue border for table cells */
+}
+
+th {
+    background-color: #90caf9; /* Light blue for table header */
+    color: #ffffff; /* White text for header */
+}
+
+ul {
+    list-style-type: none; /* Removes bullets */
+    padding: 0; /* Removes padding */
+}
+#checkoutRecipes{
+    margin-top: 20px ;
+    
+    background-color: #160bed; /* Light blue */
+    color: #fff; /* White text */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 20px; /* Top-bottom and left-right padding */
+    font-size: 1.1em; /* Slightly larger text */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transition for hover effects */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+    
+    display: flex;          /* Enable flexbox */
+    flex-direction: column; /* Stack items vertically */
+    align-items: center;    /* Center items horizontally */
+    justify-content: center;
+
+    }
+#checkoutRecipes:hover {
+        background-color: #d28a3c; /* Darker blue on hover */
+        transform: scale(1.05); /* Slightly grow on hover */
+}
+

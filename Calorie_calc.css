@@ -1,0 +1,156 @@
+
+
+  .container {
+    max-width: 600px;
+    /* background: pink; */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .container:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+  }
+  
+  h1 {
+    text-align: center;
+    color: #673ab7; /* Purple color */
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  }
+  
+  label {
+    font-weight: bold;
+    color: #3e2723; /* Dark brown color for labels */
+  }
+  
+  input, select {
+    padding: 10px;
+    margin: 10px 0;
+    width: 100%;
+    border: 2px solid #1976d2; /* Blue border */
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s, background-color 0.3s;
+  }
+  
+  input:focus, select:focus {
+    border-color: #1565c0; /* Darker blue on focus */
+    background-color: #e1f5fe; /* Light blue background on focus */
+    outline: none;
+  }
+  
+  button {
+    background-color: #4fc3f7; /* Light blue background */
+    color: white;
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 5px;
+    width: 100%;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  button:hover {
+    background-color: #29b6f6; /* Slightly darker light blue on hover */
+    transform: translateY(-2px);
+  }
+  
+  button:active {
+    transform: translateY(0);
+  }
+  
+  #result {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  #result h2 {
+    color: #003366; /* Dark blue for heading */
+  }
+  
+  #calories, #protein {
+    color: #4fc3f7; /* Light blue for results */
+    font-weight: bold;
+    font-size: 20px; /* Optional: increase font size for better visibility */
+  }
+  
+  @media (max-width: 600px) {
+    body {
+      padding: 10px;
+    }
+    .container {
+      padding: 20px;
+    }
+    button {
+      padding: 10px;
+    }
+  }
+  body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-image: url('bg_2.jpg');
+    
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+
+   
+  }
+  
+  .container {
+    max-width: 800px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  label, input, select {
+    display: block;
+    margin: 10px 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  button {
+    background-color: #100317;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    width: 100%;
+  }
+  
+  button:hover {
+    background-color: #550e8f;
+  }
+  
+  #result {
+    margin-top: 20px;
+  }
+  
+  .unit-toggle {
+    margin: 10px 0;
+    display: flex; /* Flexbox for horizontal alignment */
+    justify-content: space-between; /* Space out the options */
+  }
+  
+  .unit-toggle label {
+    display: flex; /* Flexbox for proper alignment */
+    align-items: center; /* Center align items vertically */
+  }
+  
+  .unit-group {
+    display: none;
+  }
+  

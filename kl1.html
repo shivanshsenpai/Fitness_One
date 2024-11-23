@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Entry Form</title>
+    <link rel="stylesheet" href="kl.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Enter Your Details</h2>
+        <form id="userForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" min="18" max="60" required>
+
+            <label for="timeSlot">Preferred Time Slot:</label>
+            <select id="timeSlot" name="timeSlot" required>
+                <option value="8AM-9AM">8AM-9AM</option>
+                <option value="9AM-10AM">9AM-10AM</option>
+                <option value="10AM-11AM">10AM-11AM</option>
+                <option value="11AM-12PM">11AM-12PM</option>
+                <option value="12PM-1PM">12PM-1PM</option>
+                <option value="1PM-2PM">1PM-2PM</option>
+                <option value="2PM-3PM">2PM-3PM</option>
+                <option value="3PM-4PM">3PM-4PM</option>
+                <option value="4PM-5PM">4PM-5PM</option>
+                <option value="5PM-6PM">5PM-6PM</option>
+
+
+            </select>
+
+            <button type="submit">Find Matches</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('userForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const age = document.getElementById('age').value;
+            const timeSlot = document.getElementById('timeSlot').value;
+
+            // Store user info in localStorage
+            localStorage.setItem('user', JSON.stringify({ name, age, timeSlot }));
+
+            // Redirect to matching profiles page
+            window.location.href = 'kl.html';
+        });
+    </script>
+</body>
+</html>

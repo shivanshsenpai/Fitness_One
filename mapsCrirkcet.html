@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Crircket Academies and Get thier Directions</title>
+    <link rel="stylesheet" href="Maps.css">
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD34-MMhYj1Wc7bEgCqOF9e1TJTgA0R-kU&libraries=places&callback=initMap">
+    </script>
+    <style>
+        #map {
+            height: 500px;
+            width: 100%;
+        }
+        #mymap {
+            margin-top: 20px;
+            height: 480px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Nearby Gyms and Directions</h2>
+
+    <!-- Google Maps (using API for user's location and directions) -->
+    <div id="map"></div>
+
+    <!-- Google My Maps (Iframe for pre-added gyms) -->
+    <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1eSCQf0NL7H1KLFa8h53gSwPHpKL2g3Q&ehbc=2E312F" width="640" height="480"></iframe>
+    <script>
+        let map, userMarker, directionsService, directionsRenderer;
+
+        function initMap() {
+            // Initialize map centered on a default location
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 37.7749, lng: -122.4194 }, // Default center (San Francisco)
+                zoom: 14
+            });
+
+            // Initialize the directions services
+            directionsService = new google.maps.DirectionsService();
+            directionsRenderer = new google.maps.DirectionsRenderer();
+            directionsRenderer.setMap(map);
+
+            // Get user's current location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+
+                    // Place a marker at the user's current location
+                    userMarker = new google.maps.Marker({
+                        position: userLocation,
+                        map: map,
+                        title: 'Your Location'
+                    });
+
+                    // Set the map's center to the user's location
+                    map.setCenter(userLocation);
+
+                    // Optionally, you can search for gyms using the Google Places API here (or rely on the iframe).
+                });
+            } else {
+                alert('Geolocation is not supported by your browser.');
+            }
+        }
+
+        // You can add more logic here to calculate and show directions from the user's location to a gym in the iframe
+    </script>
+
+</body>
+</html>
