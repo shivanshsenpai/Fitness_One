@@ -195,7 +195,7 @@ h1, h2, h3, h4 {
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at 60% 50%, rgba(8, 12, 20, 0.8) 0%, rgba(8, 12, 20, 0.96) 100%);
+    background: linear-gradient(180deg, rgba(8, 12, 20, 0.88) 0%, rgba(8, 12, 20, 0.98) 100%);
     z-index: -1;
 }
 
@@ -214,6 +214,7 @@ h1, h2, h3, h4 {
     font-size: 3.5rem;
     line-height: 1.15;
     margin-bottom: 1.5rem;
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
 }
 
 .hero-left p {
@@ -221,6 +222,7 @@ h1, h2, h3, h4 {
     font-size: 1.1rem;
     margin-bottom: 2.5rem;
     max-width: 580px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
 .hero-actions {
@@ -628,7 +630,7 @@ textarea.contact-input {
 }
 
 /* Responsiveness Queries */
-@media (max-width: 1024px) {
+@media (max-width: 1150px) {
     .hero-content {
         grid-template-columns: 1fr;
         text-align: center;
@@ -646,6 +648,8 @@ textarea.contact-input {
     }
     .spline-wrapper {
         height: 380px;
+        max-width: 600px;
+        margin: 0 auto;
     }
     .mission-grid {
         grid-template-columns: 1fr;
