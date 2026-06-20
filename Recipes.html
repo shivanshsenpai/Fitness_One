@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Recipe Recommender | Fit Connect</title>
+    <link rel="stylesheet" href="recipes.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/6c13d4b345.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="recipe-container">
+        <!-- Header -->
+        <header class="recipe-header">
+            <a href="/" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Home</a>
+            <h1>Smart Recipe Suggestion</h1>
+            <p class="subtitle font-outfit">Select two ingredients to find customized high-protein recipes. Dropdowns auto-filter valid combinations.</p>
+        </header>
+
+        <!-- Search Form Card -->
+        <main class="recipe-content">
+            <div class="search-card">
+                <form id="recipeForm">
+                    <div class="form-group">
+                        <label for="ingredient1"><i class="fa-solid fa-seedling"></i> Select Primary Ingredient:</label>
+                        <select id="ingredient1" onchange="filterSecondaryIngredient()" required>
+                            <option value="None" selected>None (Select Ingredient)</option>
+                            <option value="Rice">Rice</option>
+                            <option value="Chicken">Chicken</option>
+                            <option value="Egg">Egg</option>
+                            <option value="Potato">Potato</option>
+                            <option value="Mushroom">Mushroom</option>
+                            <option value="Carrot">Carrot</option>
+                            <option value="Tofu">Tofu</option>
+                            <option value="Milk">Milk</option>
+                            <option value="Kidney Beans">Kidney Beans</option>
+                            <option value="Chickpea">Chickpea</option>
+                            <option value="Arhar Dal">Arhar Dal</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ingredient2"><i class="fa-solid fa-pepper-hot"></i> Select Secondary Ingredient:</label>
+                        <select id="ingredient2" required>
+                            <option value="None" selected>None</option>
+                            <!-- Filtered dynamically by JavaScript -->
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-search">Find Recipes <i class="fa-solid fa-utensils"></i></button>
+                </form>
+            </div>
+
+            <!-- Results Section -->
+            <div id="resultsWrapper" class="results-wrapper">
+                <div id="recipeResults" class="recipe-results">
+                    <!-- Dynamic Recipes will load here -->
+                    <div class="empty-state">
+                        <i class="fa-solid fa-drumstick-bite empty-icon"></i>
+                        <p>Select your ingredients and click "Find Recipes" to display matching suggestions.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Include Recipes database and logic script -->
+    <script src="recipes.js"></script>
+</body>
+</html>

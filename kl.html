@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Match Finder | Fit Connect</title>
+    <link rel="stylesheet" href="/kl.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/6c13d4b345.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="lobby-container">
+        <div class="matches-card">
+            <div class="card-header">
+                <a href="/find-friends" class="back-link"><i class="fa-solid fa-arrow-left"></i> Lobby</a>
+                <h1>Fitness Matches</h1>
+                <p class="subtitle">Gym partners scheduling training sessions at the same hour.</p>
+            </div>
+
+            <!-- Profiles deck list -->
+            <div id="profileContainer" class="deck-container">
+                <!-- Profile Cards will load dynamically -->
+            </div>
+
+            <!-- Match Overlay modal popup -->
+            <div id="matchOverlay" class="match-overlay" style="display: none;">
+                <div class="match-popup-content">
+                    <span class="confetti"><i class="fa-solid fa-face-smile-beam"></i></span>
+                    <h2>It's a Match!</h2>
+                    <p id="matchText">You and Aditi both preferred the 8AM-9AM hour!</p>
+                    <div class="match-popup-actions">
+                        <a id="overlayChatBtn" href="#" class="btn btn-popup-chat">Chat Now <i class="fa-solid fa-comment"></i></a>
+                        <button class="btn-popup-close" onclick="closeMatchOverlay()">Keep Swiping</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Large dataset of local fitness profiles matching schedules
+        const profiles = [
+            { id: 1, name: 'Aditi Sharma', age: 25, timeSlot: '8AM-9AM' },
+            { id: 2, name: 'Aarav Patel', age: 28, timeSlot: '8AM-9AM' },
+            { id: 3, name: 'Rohan Mehra', age: 27, timeSlot: '8AM-9AM' },
+            { id: 4, name: 'Varun Joshi', age: 27, timeSlot: '8AM-9AM' },
+            { id: 5, name: 'Kavya Singh', age: 28, timeSlot: '8AM-9AM' },
+            { id: 6, name: 'Karan Malhotra', age: 27, timeSlot: '9AM-10AM' },
+            { id: 7, name: 'Meera Rao', age: 27, timeSlot: '9AM-10AM' },
+            { id: 8, name: 'Pooja Kapoor', age: 27, timeSlot: '9AM-10AM' },
+            { id: 9, name: 'Arjun Gupta', age: 27, timeSlot: '9AM-10AM' },
+            { id: 10, name: 'Ananya Sen', age: 22, timeSlot: '10AM-11AM' },
+            { id: 11, name: 'Vikram Chawla', age: 22, timeSlot: '10AM-11AM' },
+            { id: 12, name: 'Sneha Reddy', age: 22, timeSlot: '10AM-11AM' },
+            { id: 13, name: 'Nisha Vyas', age: 22, timeSlot: '11AM-12PM' },
+            { id: 14, name: 'Priya Nair', age: 22, timeSlot: '11AM-12PM' },
+            { id: 15, name: 'Riya Bakshi', age: 22, timeSlot: '11AM-12PM' },
+            { id: 16, name: 'Rahul Roy', age: 22, timeSlot: '11AM-12PM' },
+            { id: 17, name: 'Siddharth Pal', age: 22, timeSlot: '12PM-1PM' },
+            { id: 18, name: 'Deepa Shah', age: 22, timeSlot: '12PM-1PM' },
+            { id: 19, name: 'Sanya Mirza', age: 22, timeSlot: '12PM-1PM' },
+            { id: 20, name: 'Ankit Kumar', age: 22, timeSlot: '1PM-2PM' },
+            { id: 21, name: 'Sameer Sen', age: 22, timeSlot: '1PM-2PM' },
+            { id: 22, name: 'Aditya Das', age: 22, timeSlot: '1PM-2PM' },
+            { id: 23, name: 'Aishwarya Rai', age: 22, timeSlot: '1PM-2PM' },
+            { id: 24, name: 'Shreya Ghoshal', age: 22, timeSlot: '2PM-3PM' },
+            { id: 25, name: 'Dhruv Rathee', age: 22, timeSlot: '2PM-3PM' },
+            { id: 26, name: 'Nikhil Kamath', age: 22, timeSlot: '3PM-4PM' },
+            { id: 27, name: 'Mayank Agarwal', age: 22, timeSlot: '3PM-4PM' },
+            { id: 28, name: 'Tanvi Shah', age: 22, timeSlot: '3PM-4PM' },
+            { id: 29, name: 'Neha Kakkar', age: 22, timeSlot: '4PM-5PM' },
+            { id: 30, name: 'Bhavna Pandey', age: 22, timeSlot: '4PM-5PM' },
+            { id: 31, name: 'Suraj Sharma', age: 22, timeSlot: '4PM-5PM' },
+            { id: 32, name: 'Pavan Kalyan', age: 22, timeSlot: '5PM-6PM' },
+            { id: 33, name: 'Rishabh Pant', age: 22, timeSlot: '5PM-6PM' }
+        ];
+
+        // Fetch User Preference
+        const defaultUser = { name: "Guest User", age: 24, timeSlot: "8AM-9AM" };
+        const user = JSON.parse(localStorage.getItem('user')) || defaultUser;
+
+        // Custom avatar background selection based on name hash
+        function getAvatarColor(name) {
+            const colors = ['#f87171', '#60a5fa', '#34d399', '#fbbf24', '#a78bfa', '#f472b6', '#22d3ee'];
+            let hash = 0;
+            for (let i = 0; i < name.length; i++) {
+                hash = name.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            const index = Math.abs(hash) % colors.length;
+            return colors[index];
+        }
+
+        // Render matching buddy list
+        function displayMatchingProfiles() {
+            const container = document.getElementById('profileContainer');
+            container.innerHTML = '';
+
+            // Filter buddy profiles by preferred hour
+            const matched = profiles.filter(p => p.timeSlot === user.timeSlot);
+
+            if (matched.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-heart-crack empty-icon"></i>
+                        <p>No profiles found training at <strong>${user.timeSlot}</strong>. Try choosing another hours in Lobby.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Slice top 5 matches
+            matched.slice(0, 5).forEach(buddy => {
+                const initial = buddy.name.charAt(0).toUpperCase();
+                const color = getAvatarColor(buddy.name);
+
+                const card = document.createElement('div');
+                card.className = 'profile-card';
+                card.id = `profile-${buddy.id}`;
+                card.innerHTML = `
+                    <div class="avatar-wrapper">
+                        <div class="css-avatar" style="background-color: ${color}">${initial}</div>
+                    </div>
+                    <div class="profile-info">
+                        <h3>${buddy.name}</h3>
+                        <p class="age">Age: <span>${buddy.age}</span></p>
+                        <p class="hour"><i class="fa-regular fa-clock"></i> <span>${buddy.timeSlot}</span></p>
+                    </div>
+                    <div class="card-buttons">
+                        <button class="btn-action dislike-btn" onclick="dislikeProfile(${buddy.id})"><i class="fa-solid fa-xmark"></i></button>
+                        <button class="btn-action like-btn" onclick="likeProfile(${buddy.id}, '${buddy.name}')"><i class="fa-solid fa-heart"></i></button>
+                        <a id="chatLink-${buddy.id}" href="/chat?user=${encodeURIComponent(buddy.name)}&id=${buddy.id}" class="btn-action chat-btn" style="display:none;"><i class="fa-solid fa-comment"></i> Chat</a>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Like profile interaction
+        function likeProfile(id, name) {
+            // Display match popup overlay
+            const overlay = document.getElementById('matchOverlay');
+            document.getElementById('matchText').innerHTML = `You and <strong>${name}</strong> both train at <strong>${user.timeSlot}</strong>!`;
+            
+            // Set link target
+            document.getElementById('overlayChatBtn').href = `/chat?user=${encodeURIComponent(name)}&id=${id}`;
+            overlay.style.display = 'flex';
+
+            // Show local chat button on the card
+            const chatLink = document.getElementById(`chatLink-${id}`);
+            if (chatLink) {
+                chatLink.style.display = 'inline-flex';
+            }
+        }
+
+        function dislikeProfile(id) {
+            const card = document.getElementById(`profile-${id}`);
+            if (card) {
+                card.style.transform = 'translateX(-150px) rotate(-15deg)';
+                card.style.opacity = '0';
+                setTimeout(() => card.remove(), 400);
+            }
+        }
+
+        function closeMatchOverlay() {
+            document.getElementById('matchOverlay').style.display = 'none';
+        }
+
+        // Initialize matching panel
+        displayMatchingProfiles();
+    </script>
+</body>
+</html>

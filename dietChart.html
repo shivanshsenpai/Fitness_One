@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Weekly Diet Dashboard | Fit Connect</title>
+    <link rel="stylesheet" href="dietChart.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/6c13d4b345.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Dashboard Header -->
+        <header class="dashboard-header">
+            <div class="header-navigation">
+                <a href="/calorie-calc" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Recalculate</a>
+                <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> Print Plan</button>
+            </div>
+            <h1>Your Customized Weekly Diet Plan</h1>
+            <p class="subtitle font-outfit">Dynamically optimized based on your target nutritional objectives.</p>
+        </header>
+
+        <!-- Nutrition Summary Cards -->
+        <section class="summary-cards">
+            <div class="card summary-card">
+                <span class="card-title">TARGET ENERGY</span>
+                <h3 id="targetCalorieHeader">-- kcal</h3>
+                <span class="card-badge">Daily Budget</span>
+            </div>
+            <div class="card summary-card">
+                <span class="card-title">TARGET PROTEIN</span>
+                <h3 id="targetProteinHeader">-- g</h3>
+                <span class="card-badge bg-purple">Muscle Builder</span>
+            </div>
+            <div class="card summary-card">
+                <span class="card-title">DIET CLASSIFICATION</span>
+                <h3 id="dietStyleHeader" class="capitalize">--</h3>
+                <span class="card-badge bg-green">Diet Type</span>
+            </div>
+        </section>
+
+        <!-- Day Selector Tabs -->
+        <nav class="days-tab-nav">
+            <ul id="tabsList" class="tabs-list">
+                <!-- Tabs generated dynamically -->
+            </ul>
+        </nav>
+
+        <!-- Main Dashboard View -->
+        <main class="dashboard-view">
+            <!-- Day Details -->
+            <div class="day-details-panel">
+                <div class="panel-header">
+                    <h2 id="activeDayTitle">Monday's Schedule</h2>
+                    <span id="activeDayBadge" class="day-status-badge">Generated Plan</span>
+                </div>
+
+                <!-- Daily Progress Bars -->
+                <div class="daily-progress-section">
+                    <div class="progress-container">
+                        <div class="progress-label">
+                            <span>Calories Generated</span>
+                            <span id="calProgressPercent">--%</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div id="calProgressBar" class="progress-bar-fill cal-fill" style="width: 0%"></div>
+                        </div>
+                        <span id="calProgressText" class="progress-stats">0 / 0 kcal</span>
+                    </div>
+
+                    <div class="progress-container">
+                        <div class="progress-label">
+                            <span>Protein Met</span>
+                            <span id="protProgressPercent">--%</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div id="protProgressBar" class="progress-bar-fill prot-fill" style="width: 0%"></div>
+                        </div>
+                        <span id="protProgressText" class="progress-stats">0 / 0 g</span>
+                    </div>
+                </div>
+
+                <!-- Meals Grid -->
+                <div id="mealsGrid" class="meals-grid">
+                    <!-- Cards will be populated here -->
+                </div>
+            </div>
+
+            <!-- Recipe Redirect Card -->
+            <div class="recipe-redirect-box">
+                <div class="box-content">
+                    <i class="fa-solid fa-wheat-awn box-icon"></i>
+                    <h3>Not sure how to prepare these?</h3>
+                    <p>Select any two ingredients from your dashboard and get step-by-step cooking guides instantly.</p>
+                    <button id="checkoutRecipes" class="btn-checkout">Browse Recipe Guides <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Parse URL query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const calorieGoal = parseInt(urlParams.get('calories')) || 2000;
+        const proteinGoal = parseInt(urlParams.get('protein')) || 90;
+        const dietType = urlParams.get('diet') || 'combined';
+
+        // Update nutritional target headers
+        document.getElementById('targetCalorieHeader').innerText = `${calorieGoal} kcal`;
+        document.getElementById('targetProteinHeader').innerText = `${proteinGoal} g`;
+        document.getElementById('dietStyleHeader').innerText = dietType;
+
+        const caloriesPer100g = {
+            'Egg': 155,
+            'Chicken': 270,
+            'Potato': 70,
+            'Mushroom': 42,
+            'Carrot': 61,
+            'Beans': 50,
+            'Paneer': 265,
+            'Tofu': 100,
+            'Milk': 80,
+            'Soy Milk': 70,
+            'Kidney Beans': 260,
+            'Chickpea': 180,
+            'Arhar Dal': 380,
+            'Rice': 110,
+            'Roti': 220,
+            'Banana': 100
+        };
+
+        const proteinPer100g = {
+            'Egg': 10,
+            'Chicken': 18,
+            'Potato': 1,
+            'Mushroom': 2,
+            'Carrot': 1,
+            'Beans': 2,
+            'Paneer': 14,
+            'Tofu': 6,
+            'Milk': 3,
+            'Soy Milk': 3,
+            'Kidney Beans': 17,
+            'Chickpea': 6,
+            'Arhar Dal': 17,
+            'Rice': 2.7,
+            'Roti': 3.6,
+            'Banana': 1.1
+        };
+
+        const limits = {
+            'Egg': 400,
+            'Chicken': 400,
+            'Potato': 600,
+            'Mushroom': 600,
+            'Carrot': 600,
+            'Beans': 600,
+            'Paneer': 300,
+            'Tofu': 400,
+            'Milk': 350,
+            'Soy Milk': 350,
+            'Kidney Beans': 320,
+            'Chickpea': 320,
+            'Arhar Dal': 320,
+            'Rice': 350,
+            'Roti': 400,
+            'Banana': 500
+        };
+
+        // Categorize foods for displaying tags
+        const categoryMapping = {
+            'Egg': 'protein non-veg',
+            'Chicken': 'protein non-veg',
+            'Paneer': 'dairy veg',
+            'Milk': 'dairy veg',
+            'Tofu': 'vegan protein',
+            'Soy Milk': 'vegan protein',
+            'Arhar Dal': 'pulses vegan',
+            'Kidney Beans': 'pulses vegan',
+            'Chickpea': 'pulses vegan',
+            'Potato': 'veg carb',
+            'Carrot': 'veg healthy',
+            'Mushroom': 'veg healthy',
+            'Beans': 'veg green',
+            'Rice': 'carb base',
+            'Roti': 'carb base',
+            'Banana': 'fruit healthy'
+        };
+
+        const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        const weeklyData = {};
+
+        function generateDietPlanData(calTarget, protTarget, type) {
+            const foods = {
+                vegan: {
+                    vegetables: ['Potato', 'Mushroom', 'Carrot', 'Beans'],
+                    dairyAlternatives: ['Tofu', 'Soy Milk'],
+                    pulses: ['Kidney Beans', 'Chickpea', 'Arhar Dal'],
+                    carbs: ['Rice', 'Roti']
+                },
+                combined: {
+                    nonVeg: ['Egg', 'Chicken'],
+                    vegetables: ['Potato', 'Mushroom', 'Carrot', 'Beans'],
+                    dairy: ['Paneer', 'Tofu', 'Milk'],
+                    pulses: ['Kidney Beans', 'Chickpea', 'Arhar Dal'],
+                    carbs: ['Rice', 'Roti']
+                }
+            };
+
+            let bananaDays = 0;
+            const selectedFoods = (type === 'vegan') ? foods.vegan : foods.combined;
+
+            daysOfWeek.forEach((day, index) => {
+                let dailyCalories = 0;
+                let dailyProtein = 0;
+                let foodTotals = {};
+                let mainItemSelected = false;
+
+                // Add rice (up to 350g) and roti (up to 3)
+                const riceWeight = Math.min(350, Math.floor(Math.random() * 200) + 100);
+                const riceCalories = (caloriesPer100g['Rice'] * riceWeight) / 100;
+                const riceProtein = (proteinPer100g['Rice'] * riceWeight) / 100;
+                dailyCalories += riceCalories;
+                dailyProtein += riceProtein;
+                foodTotals['Rice'] = riceWeight;
+
+                if (index % 2 === 0) {
+                    const rotiCount = Math.min(2, Math.floor(Math.random() * 3) + 1);
+                    const rotiWeight = rotiCount * 50;
+                    const rotiCalories = caloriesPer100g['Roti'] * rotiCount;
+                    const rotiProtein = proteinPer100g['Roti'] * rotiCount;
+                    dailyCalories += rotiCalories;
+                    dailyProtein += rotiProtein;
+                    foodTotals['Roti'] = rotiWeight;
+                }
+
+                // Add bananas to at least 4 days of the week
+                if (bananaDays < 4 && Math.random() < 0.5) {
+                    const bananaCount = Math.floor(200 / 150);
+                    if (bananaCount > 0) {
+                        const bananaWeight = bananaCount * 150;
+                        const bananaCalories = (caloriesPer100g['Banana'] * bananaWeight) / 100;
+                        const bananaProtein = (proteinPer100g['Banana'] * bananaWeight) / 100;
+                        dailyCalories += bananaCalories;
+                        dailyProtein += bananaProtein;
+                        foodTotals['Banana'] = bananaWeight;
+                        bananaDays++;
+                    }
+                }
+
+                let safetyCounter = 0;
+                while ((dailyCalories < calTarget - 150 || dailyProtein < protTarget - 8) && safetyCounter < 100) {
+                    safetyCounter++;
+                    const foodCategory = Object.keys(selectedFoods)[Math.floor(Math.random() * Object.keys(selectedFoods).length)];
+                    let selectedFood;
+
+                    if (foodCategory === 'pulses' || foodCategory === 'dairy') {
+                        if (mainItemSelected && type === 'combined') continue;
+                    }
+
+                    selectedFood = selectedFoods[foodCategory][Math.floor(Math.random() * selectedFoods[foodCategory].length)];
+                    const maxLimit = limits[selectedFood] || 600;
+                    const randomWeight = Math.min(maxLimit, Math.floor(Math.random() * 150) + 50);
+                    const foodCalories = (caloriesPer100g[selectedFood] * randomWeight) / 100;
+                    const foodProtein = (proteinPer100g[selectedFood] * randomWeight) / 100;
+
+                    dailyCalories += foodCalories;
+                    dailyProtein += foodProtein;
+                    foodTotals[selectedFood] = (foodTotals[selectedFood] || 0) + randomWeight;
+
+                    if (selectedFoods.pulses.includes(selectedFood)) {
+                        mainItemSelected = true;
+                    }
+                }
+
+                weeklyData[day] = {
+                    calories: Math.round(dailyCalories),
+                    protein: Math.round(dailyProtein),
+                    foods: foodTotals
+                };
+            });
+        }
+
+        // Generate weekly plan values
+        generateDietPlanData(calorieGoal, proteinGoal, dietType);
+
+        // Render Tabs and setup layout
+        const tabsList = document.getElementById('tabsList');
+        daysOfWeek.forEach((day, index) => {
+            const li = document.createElement('li');
+            li.innerHTML = `<button class="tab-btn ${index === 0 ? 'active' : ''}" onclick="selectDay('${day}', this)">${day.substring(0, 3)}</button>`;
+            tabsList.appendChild(li);
+        });
+
+        // Handler to switch active day
+        function selectDay(day, tabBtnElement) {
+            // Remove active classes
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            // Add active class to clicked button
+            tabBtnElement.classList.add('active');
+
+            // Update Panel Headers
+            document.getElementById('activeDayTitle').innerText = `${day}'s Diet Plan`;
+            
+            const data = weeklyData[day];
+            
+            // Calculate percentages
+            const calPercentage = Math.min(100, Math.round((data.calories / calorieGoal) * 100));
+            const protPercentage = Math.min(100, Math.round((data.protein / proteinGoal) * 100));
+
+            // Update Progress bars
+            document.getElementById('calProgressPercent').innerText = `${calPercentage}%`;
+            document.getElementById('calProgressBar').style.width = `${calPercentage}%`;
+            document.getElementById('calProgressText').innerText = `${data.calories} / ${calorieGoal} kcal`;
+
+            document.getElementById('protProgressPercent').innerText = `${protPercentage}%`;
+            document.getElementById('protProgressBar').style.width = `${protPercentage}%`;
+            document.getElementById('protProgressText').innerText = `${data.protein} / ${proteinGoal} g`;
+
+            // Render Meals Grid
+            const grid = document.getElementById('mealsGrid');
+            grid.innerHTML = '';
+
+            Object.keys(data.foods).forEach(food => {
+                const weight = data.foods[food];
+                const roundedWeight = Math.ceil(weight / 50) * 50; 
+                let qtyText = `${weight}g`;
+
+                if (food === 'Roti') qtyText = `${roundedWeight}g (${roundedWeight / 50} Roti)`;
+                if (food === 'Egg') qtyText = `${roundedWeight}g (${roundedWeight / 50} Egg)`;
+                if (food === 'Banana') qtyText = `${roundedWeight}g (${roundedWeight / 150} Banana)`;
+
+                const foodCals = Math.round((caloriesPer100g[food] * weight) / 100);
+                const foodProt = Math.round((proteinPer100g[food] * weight) / 100);
+                
+                const tags = categoryMapping[food] || 'healthy';
+
+                const card = document.createElement('div');
+                card.className = 'meal-card';
+                card.innerHTML = `
+                    <div class="meal-header">
+                        <span class="food-tag ${tags.split(' ')[0]}">${tags.split(' ')[0]}</span>
+                        <h4>${food}</h4>
+                    </div>
+                    <div class="meal-body">
+                        <div class="meal-stat"><strong>Qty:</strong> <span>${qtyText}</span></div>
+                        <div class="meal-stat"><strong>Energy:</strong> <span>${foodCals} kcal</span></div>
+                        <div class="meal-stat"><strong>Protein:</strong> <span>${foodProt} g</span></div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Initialize with Monday
+        selectDay('Monday', document.querySelector('.tab-btn.active'));
+
+        // Checkout recipes redirection
+        document.getElementById('checkoutRecipes').addEventListener('click', function() {
+            window.location.href = '/recipes';
+        });
+    </script>
+</body>
+</html>

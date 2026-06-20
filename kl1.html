@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitMatch - Find Gym Partners | Fit Connect</title>
+    <link rel="stylesheet" href="kl.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/6c13d4b345.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="lobby-container">
+        <div class="lobby-card">
+            <div class="card-header">
+                <a href="/" class="back-link"><i class="fa-solid fa-arrow-left"></i> Home</a> 
+                <h1>FitMatch Lobby</h1>
+                <p class="subtitle">Enter your profile metrics to discover gym buddies scheduling training sessions at the same hours.</p>
+            </div>
+            
+            <form id="userForm">
+                <div class="form-group">
+                    <label for="name"><i class="fa-regular fa-user"></i> Full Name:</label>
+                    <input type="text" id="name" name="name" placeholder="e.g. Tarun Sharma" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="age"><i class="fa-regular fa-calendar-check"></i> Age (years):</label>
+                    <input type="number" id="age" name="age" min="18" max="75" placeholder="e.g. 24" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="timeSlot"><i class="fa-regular fa-clock"></i> Preferred Training Hour:</label>
+                    <select id="timeSlot" name="timeSlot" required>
+                        <option value="8AM-9AM" selected>8:00 AM - 9:00 AM</option>
+                        <option value="9AM-10AM">9:00 AM - 10:00 AM</option>
+                        <option value="10AM-11AM">10:00 AM - 11:00 AM</option>
+                        <option value="11AM-12PM">11:00 AM - 12:00 PM</option>
+                        <option value="12PM-1PM">12:00 PM - 1:00 PM</option>
+                        <option value="1PM-2PM">1:00 PM - 2:00 PM</option>
+                        <option value="2PM-3PM">2:00 PM - 3:00 PM</option>
+                        <option value="3PM-4PM">3:00 PM - 4:00 PM</option>
+                        <option value="4PM-5PM">4:00 PM - 5:00 PM</option>
+                        <option value="5PM-6PM">5:00 PM - 6:00 PM</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-lobby">Find Fitness Buddies <i class="fa-solid fa-user-group"></i></button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('userForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const age = document.getElementById('age').value;
+            const timeSlot = document.getElementById('timeSlot').value;
+
+            // Store user info in localStorage
+            localStorage.setItem('user', JSON.stringify({ name, age, timeSlot }));
+
+            // Redirect to matching profiles route in Flask server
+            window.location.href = '/find-friends/matches';
+        });
+    </script>
+</body>
+</html>

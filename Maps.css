@@ -1,0 +1,238 @@
+/* Unified Sports Geolocation Map Styles */
+:root {
+    --bg-primary: #080c14;
+    --bg-secondary: #0f172a;
+    --bg-card: rgba(15, 23, 42, 0.65);
+    --border-glow: rgba(0, 240, 255, 0.15);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --accent-cyan: #00f0ff;
+    --accent-purple: #8b5cf6;
+    --accent-gradient: linear-gradient(135deg, #00f0ff 0%, #8b5cf6 100%);
+    --card-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8);
+    --glass-blur: blur(16px);
+    --transition-smooth: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Outfit', sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    overflow: hidden; /* Lock page to prevent double scroll since layout splits screen */
+}
+
+/* Page Frame Split */
+.map-page-container {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* Sidebar List Panel */
+.sidebar-panel {
+    background: var(--bg-secondary);
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 2rem 1.5rem;
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    margin-bottom: 2rem;
+}
+
+.btn-back {
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 1.5rem;
+    transition: var(--transition-smooth);
+}
+
+.btn-back:hover {
+    color: var(--accent-cyan);
+    transform: translateX(-4px);
+}
+
+.sidebar-header h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    line-height: 1.25;
+}
+
+.sidebar-header p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-top: 0.4rem;
+}
+
+/* Spots lists */
+.spots-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex-grow: 1;
+}
+
+.spot-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.spot-card:hover, .spot-card.active {
+    border-color: var(--accent-cyan);
+    background: rgba(15, 23, 42, 0.85);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -10px rgba(0, 240, 255, 0.2);
+}
+
+.spot-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    color: var(--text-primary);
+}
+
+.spot-card:hover .spot-name {
+    color: var(--accent-cyan);
+}
+
+.spot-meta {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    display: flex;
+    justify-content: space-between;
+}
+
+.spot-meta i {
+    color: var(--accent-purple);
+    margin-right: 4px;
+}
+
+.btn-directions {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.5rem;
+    margin-top: 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.spot-card:hover .btn-directions, .spot-card.active .btn-directions {
+    background: var(--accent-gradient);
+    color: #000;
+    border-color: transparent;
+}
+
+/* Map Panel Container */
+.map-panel {
+    height: 100%;
+    position: relative;
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+}
+
+/* Leaflet Overrides for Dark aesthetics */
+.leaflet-popup-content-wrapper {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 12px !important;
+    padding: 6px !important;
+    box-shadow: var(--card-shadow) !important;
+}
+
+.leaflet-popup-content h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--accent-cyan);
+    font-size: 1rem;
+    margin-bottom: 4px;
+}
+
+.leaflet-popup-content p {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.leaflet-popup-tip {
+    background: var(--bg-secondary) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.leaflet-bar a {
+    background-color: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    transition: var(--transition-smooth) !important;
+}
+
+.leaflet-bar a:hover {
+    background-color: var(--bg-primary) !important;
+    color: var(--accent-cyan) !important;
+}
+
+/* Custom pulsing user marker icon */
+.user-pulse-marker {
+    background: var(--accent-cyan);
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.7);
+    animation: pulse 1.8s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.9);
+        box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.7);
+    }
+    70% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 12px rgba(0, 240, 255, 0);
+    }
+    100% {
+        transform: scale(0.9);
+        box-shadow: 0 0 0 0 rgba(0, 240, 255, 0);
+    }
+}
+
+/* Responsiveness Split page */
+@media (max-width: 768px) {
+    .map-page-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: 280px 1fr;
+    }
+    .sidebar-panel {
+        height: 280px;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        padding: 1.5rem;
+    }
+}

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fit Connect | Elite Fitness Platform</title>
+    <link rel="stylesheet" href="home.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/6c13d4b345.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header/Navbar -->
+    <header class="navbar">
+        <div class="nav-container">
+            <!-- Logo -->
+            <a href="/" class="nav-logo">
+                <img src="logo.png" alt="logo" />
+                <span>Fit Connect</span>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="/" class="active">Home</a></li>
+                    <li><a href="#mission">About</a></li>
+                    <li><a href="#" onclick="openModal('registerModal')">Register</a></li>
+                    <li><a href="#" onclick="openModal('loginModal')">Login</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <!-- Background Video with Overlay -->
+        <div class="video-container">
+            <video autoplay loop muted class="video_1" src="video.mp4" type="video/mp4"></video>
+            <div class="video-overlay"></div>
+        </div>
+
+        <div class="hero-content">
+            <div class="hero-left">
+                <span class="badge">Next Generation Fitness Platform</span>
+                <h1>Your Path to a <span class="gradient-text">Healthier Tomorrow</span> Starts Today</h1>
+                <p>Welcome to Fit Connect—your ultimate personal training dashboard. Connect with gym buddies, plan custom weekly diets, calculate nutritional benchmarks, and verify your yoga posture in real-time.</p>
+                <div class="hero-actions">
+                    <a href="/explore" class="btn btn-primary">Get Started <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="#offers" class="btn btn-secondary">Explore Services</a>
+                </div>
+            </div>
+            
+            <div class="hero-right">
+                <!-- Interactive Spline 3D typography model container -->
+                <div class="spline-wrapper">
+                    <iframe src="https://my.spline.design/distortingtypography-YfkGKRcyYsbBH5XQUzl9lAje/" frameborder="0" width="100%" height="100%" class="spline-iframe"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section id="mission" class="mission-section">
+        <div class="section-container">
+            <div class="mission-grid">
+                <div class="mission-text-card">
+                    <span class="subheading">OUR MISSION</span>
+                    <h2>Empowering Better Lives Through Technology</h2>
+                    <p>Our mission is to inspire and empower individuals to lead healthier, more active lives by providing an accessible, state-of-the-art platform for fitness enthusiasts and sports lovers.</p>
+                    <p>We aim to foster a vibrant community where users can discover local training spots, manage calorie objectives, and receive intelligent real-time posture feedback through artificial intelligence.</p>
+                </div>
+                <div class="mission-image-card">
+                    <img src="yoga_pose.png" alt="Yoga Pose Illustration" class="floating-image">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What We Offer Section -->
+    <section id="offers" class="offers-section">
+        <div class="section-container">
+            <div class="container_2">
+                <span class="subheading">TAILORED SOLUTIONS</span>
+                <h2>What We Offer</h2>
+            </div>
+
+            <div class="offers-grid">       
+                <!-- Card 1: Sports Places Maps -->
+                <div class="offer-card">
+                    <div class="card-img-container">
+                        <img src="h5.gif" alt="Explore Sports and Gyms" class="card-image">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-heading">Explore Local Hubs</h3>
+                        <p class="card-subheading">Locate nearby gyms, yoga studios, badminton and football pitches on a responsive dark mode map.</p>
+                        <a href="/explore"><button class="card-button">Explore Maps <i class="fa-solid fa-map-location-dot"></i></button></a>  
+                    </div>
+                </div>
+
+                <!-- Card 2: Calorie Calculator -->
+                <div class="offer-card">
+                    <div class="card-img-container">
+                        <img src="h2.gif" alt="Calorie & Protein Calculator" class="card-image">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-heading">Smart Calorie Counter</h3>
+                        <p class="card-subheading">Compute your daily energy targets and protein metrics with precision using customized biometric equations.</p>
+                        <a href="/calorie-calc"><button class="card-button">Calculate Now <i class="fa-solid fa-calculator"></i></button></a>
+                    </div>
+                </div>
+                
+                <!-- Card 3: Real-Time Yoga Posture -->
+                <div class="offer-card">
+                    <div class="card-img-container">
+                        <img src="yoga_1.gif" alt="Real-time Pose Detection" class="card-image">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-heading">AI Yoga Assistant</h3>
+                        <p class="card-subheading">Train with computer-vision pose verification to perfect poses like Warrior, Tree, and Cobra.</p>
+                        <a href="/yoga-detection"><button class="card-button">Launch AI Camera <i class="fa-solid fa-video"></i></button></a>
+                    </div>
+                </div>
+
+                <!-- Card 4: Match Finder -->
+                <div class="offer-card">
+                    <div class="card-img-container">
+                        <img src="h4.gif" alt="Find Friends & Gym Buddies" class="card-image">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-heading">Buddy Match Maker</h3>
+                        <p class="card-subheading">Find gym partners near you scheduling the same slots. Chat directly and coordinate workouts.</p>
+                        <a href="/find-friends"><button class="card-button">Find Matches <i class="fa-solid fa-user-group"></i></button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section about">
+                <h2 class="logo-text">Fit Connect</h2>
+                <p>Fit Connect is a unified platform blending AI-driven posture coaching, mapping, diet planning, and peer-to-peer buddy scheduling.</p>
+                <div class="contact">
+                    <span><i class="fa-regular fa-envelope"></i>&nbsp; fit_connect@gmail.com</span>
+                </div>
+            </div>
+            <div class="footer-section links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">Events</a></li>
+                    <li><a href="#">Team</a></li>
+                    <li><a href="#">Mentors</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                </ul>
+            </div>
+            <div class="footer-section contact-form">
+                <h3>Contact Us</h3>
+                <form action="#" method="post">
+                    <input type="email" name="email" class="text-input contact-input" placeholder="Your email address..." required>
+                    <textarea name="message" class="text-input contact-input" placeholder="Your Message..." required></textarea>
+                    <button type="submit" class="btn-submit">
+                        <i class="fa-regular fa-envelope"></i> Send
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Fit Connect | Overhauled and Optimized
+        </div>
+    </footer>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('registerModal')">&times;</span>
+            <h2>Create an Account</h2>
+            <form class="modal-form" onsubmit="event.preventDefault(); alert('Account registered successfully! Start scheduling.'); closeModal('registerModal');">
+                <label for="reg-name">Full Name</label>
+                <input type="text" id="reg-name" placeholder="John Doe" required>
+                <label for="reg-email">Email Address</label>
+                <input type="email" id="reg-email" placeholder="john@example.com" required>
+                <label for="reg-password">Password</label>
+                <input type="password" id="reg-password" placeholder="••••••••" required>
+                <button type="submit" class="btn btn-primary">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Welcome Back</h2>
+            <form class="modal-form" onsubmit="event.preventDefault(); alert('Logged in successfully!'); closeModal('loginModal');">
+                <label for="login-email">Email Address</label>
+                <input type="email" id="login-email" placeholder="john@example.com" required>
+                <label for="login-password">Password</label>
+                <input type="password" id="login-password" placeholder="••••••••" required>
+                <button type="submit" class="btn btn-primary">Log In</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Modal helpers
+        function openModal(id) {
+            document.getElementById(id).style.display = 'flex';
+        }
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+        // Close modals when clicking outside contents
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+    <script src="https://cdn.botpress.cloud/webchat/v2.1/inject.js"></script>
+    <script src="https://mediafiles.botpress.cloud/8a3ddb01-26f4-4c91-8531-21fecc98f318/webchat/v2.1/config.js"></script>
+</body>
+</html>
