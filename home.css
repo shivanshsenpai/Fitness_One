@@ -292,11 +292,63 @@ h1, h2, h3, h4 {
     height: 100%;
 }
 
-/* Shared Sections Container */
-.section-container {
+/* Stats Counter Section */
+.stats-section {
+    background: linear-gradient(180deg, rgba(8, 12, 20, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border-y: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 3rem 2rem;
+    position: relative;
+    z-index: 20;
+}
+
+.stats-container {
     max-width: 1300px;
     margin: 0 auto;
-    padding: 6rem 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+}
+
+.stat-card {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(0, 240, 255, 0.15);
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    transition: var(--transition-smooth);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(0, 240, 255, 0.4);
+    box-shadow: 0 15px 35px -10px rgba(0, 240, 255, 0.2);
+}
+
+.stat-icon {
+    font-size: 2rem;
+    color: var(--accent-cyan);
+    margin-bottom: 0.75rem;
+}
+
+.stat-number {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 800;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 /* Mission Section Layout */

@@ -123,6 +123,34 @@
         </div>
       </div>
 
+      <!-- Macro Breakdown Bars -->
+      <div class="macro-breakdown-card">
+        <h3>Estimated Macro Breakdown</h3>
+        <div class="macro-item">
+          <div class="macro-info">
+            <span><i class="fa-solid fa-fire text-cyan"></i> Protein (<span id="macroProteinGrams">--</span>g)</span>
+            <span id="macroProteinPct">25%</span>
+          </div>
+          <div class="progress-bar-bg"><div id="barProtein" class="progress-bar-fill fill-cyan" style="width: 25%;"></div></div>
+        </div>
+
+        <div class="macro-item">
+          <div class="macro-info">
+            <span><i class="fa-solid fa-wheat-awn text-purple"></i> Carbohydrates (<span id="macroCarbsGrams">--</span>g)</span>
+            <span id="macroCarbsPct">50%</span>
+          </div>
+          <div class="progress-bar-bg"><div id="barCarbs" class="progress-bar-fill fill-purple" style="width: 50%;"></div></div>
+        </div>
+
+        <div class="macro-item">
+          <div class="macro-info">
+            <span><i class="fa-solid fa-droplet text-amber"></i> Healthy Fats (<span id="macroFatsGrams">--</span>g)</span>
+            <span id="macroFatsPct">25%</span>
+          </div>
+          <div class="progress-bar-bg"><div id="barFats" class="progress-bar-fill fill-amber" style="width: 25%;"></div></div>
+        </div>
+      </div>
+
       <div class="diet-planner-trigger">
         <label for="dietType">Preferred Diet Style:</label>
         <select id="dietType" name="dietType" required>
@@ -222,13 +250,21 @@
         calorieGoal += 500;
       }
 
-      // Suggested protein intake (1.8g per kg is standard for training, but we stay consistent with original formula adjusted for safety)
-      const proteinGoal = Math.round(1.5 * weight); // Upgraded from 1.3 to a better active target 1.5g/kg
+      // Suggested protein intake
+      const proteinGoal = Math.round(1.5 * weight); // 1.5g/kg target
+      const proteinCalories = proteinGoal * 4;
+      const remainingCalories = Math.max(0, calorieGoal - proteinCalories);
+      const carbsGrams = Math.round((remainingCalories * 0.55) / 4);
+      const fatsGrams = Math.round((remainingCalories * 0.45) / 9);
 
       // Display results with animation
       const resultDiv = document.getElementById('result');
       document.getElementById('calories').innerText = `${Math.round(calorieGoal)} kcal`;
       document.getElementById('protein').innerText = `${proteinGoal} g`;
+
+      document.getElementById('macroProteinGrams').innerText = proteinGoal;
+      document.getElementById('macroCarbsGrams').innerText = carbsGrams;
+      document.getElementById('macroFatsGrams').innerText = fatsGrams;
       
       resultDiv.style.display = 'block';
       resultDiv.scrollIntoView({ behavior: 'smooth' });
