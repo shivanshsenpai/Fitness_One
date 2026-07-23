@@ -151,18 +151,34 @@ def classifyPose(landmarks, output_image):
             color = (0, 215, 255)
             feedback = f"Adjust Elbow Arch by {int(abs(45 - left_elbow_angle))}deg"
 
-    # Render HUD overlay on video frame
+    # Colors: BGR Format
+    # Solid Emerald Green (Perfect) vs Solid Sky Blue (Aligning) vs Solid Dark Slate (Background)
+    bg_color = (26, 18, 10) # Solid Dark Slate (#0A121A)
+    
+    if "PERFECT" in label:
+        text_color = (94, 222, 74) # Solid Emerald Green (#4ADE80)
+        border_color = (94, 222, 74)
+    else:
+        text_color = (248, 250, 252) # Solid Clean White (#F8FAFC)
+        border_color = (238, 189, 56) # Solid Soft Sky Blue (#38BDF8)
+
+    # Render HUD overlay on video frame with safe margin padding
     h, w, _ = output_image.shape
     
-    # Top Status Box Banner
-    cv2.rectangle(output_image, (10, 10), (w - 10, 60), (10, 15, 25), -1)
-    cv2.rectangle(output_image, (10, 10), (w - 10, 60), color, 2)
-    cv2.putText(output_image, label, (25, 43), cv2.FONT_HERSHEY_SIMPLEX, 0.85, color, 2)
+    # 1. Top Status Banner (y: 15 to 70)
+    cv2.rectangle(output_image, (15, 15), (w - 15, 70), bg_color, -1)
+    cv2.rectangle(output_image, (15, 15), (w - 15, 70), border_color, 2)
+    cv2.putText(output_image, label, (30, 52), cv2.FONT_HERSHEY_DUPLEX, 0.75, text_color, 2, cv2.LINE_AA)
 
-    # Bottom Feedback Banner
-    cv2.rectangle(output_image, (10, h - 60), (w - 10, h - 10), (10, 15, 25), -1)
-    cv2.rectangle(output_image, (10, h - 60), (w - 10, h - 10), (255, 255, 255), 1)
-    cv2.putText(output_image, f"GUIDANCE: {feedback}", (25, h - 25), cv2.FONT_HERSHEY_SIMPLEX, 0.65, (255, 255, 255), 2)
+    # 2. Bottom Guidance Banner (y: h - 70 to h - 15)
+    cv2.rectangle(output_image, (15, h - 70), (w - 15, h - 15), bg_color, -1)
+    cv2.rectangle(output_image, (15, h - 70), (w - 15, h - 15), (255, 255, 255), 1)
+    
+    guidance_str = f"GUIDANCE: {feedback}"
+    # Truncate guidance if it exceeds width to prevent clipping
+    if len(guidance_str) > 55:
+        guidance_str = guidance_str[:52] + "..."
+    cv2.putText(output_image, guidance_str, (30, h - 35), cv2.FONT_HERSHEY_DUPLEX, 0.58, (226, 232, 240), 1, cv2.LINE_AA)
 
     return output_image, label
 
