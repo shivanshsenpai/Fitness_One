@@ -39,10 +39,11 @@ def calculateAngle(landmark1, landmark2, landmark3):
 
     return angle
 
-# Function to classify pose based on angles
+# Function to classify pose based on angles and generate real-time correction guidance
 def classifyPose(landmarks, output_image):
-    label = "Unknown Pose"
-    color = (0, 0, 255)
+    label = "Adjusting Position..."
+    feedback = "Step into frame to align posture"
+    color = (0, 165, 255) # Default Orange/Yellow
 
     if len(landmarks) == 0:
         return output_image, label
@@ -61,41 +62,107 @@ def classifyPose(landmarks, output_image):
     left_ankle = landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value]
     right_ankle = landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value]
 
-    # Calculate angles
+    # Calculate joint angles
     left_elbow_angle = calculateAngle(left_shoulder, left_elbow, left_wrist)
     right_elbow_angle = calculateAngle(right_shoulder, right_elbow, right_wrist)
     left_knee_angle = calculateAngle(left_hip, left_knee, left_ankle)
     right_knee_angle = calculateAngle(right_hip, right_knee, right_ankle)
     hip_angle = calculateAngle(left_shoulder, left_hip, left_knee)
 
-    # Pose Detection Logic
-    if 165 <= left_elbow_angle <= 195 and 165 <= right_elbow_angle <= 195:
-        label = 'T Pose'
-        color = (0, 255, 0)
+    # 1. T-Pose Classification & Corrections
+    if (140 <= left_elbow_angle <= 210) and (140 <= right_elbow_angle <= 210) and (hip_angle > 140):
+        if (165 <= left_elbow_angle <= 195) and (165 <= right_elbow_angle <= 195):
+            label = "T POSE - PERFECT!"
+            feedback = "PERFECT ALIGNMENT! (100% Correct)"
+            color = (0, 255, 0) # GREEN when correct
+        else:
+            label = "T POSE - ALIGNING"
+            color = (0, 215, 255) # Cyan/Yellow adjusting
+            corrections = []
+            if left_elbow_angle < 165:
+                corrections.append(f"Lift Left Arm UP by {int(180 - left_elbow_angle)}deg")
+            elif left_elbow_angle > 195:
+                corrections.append(f"Lower Left Arm DOWN by {int(left_elbow_angle - 180)}deg")
+            if right_elbow_angle < 165:
+                corrections.append(f"Lift Right Arm UP by {int(180 - right_elbow_angle)}deg")
+            elif right_elbow_angle > 195:
+                corrections.append(f"Lower Right Arm DOWN by {int(right_elbow_angle - 180)}deg")
+            feedback = " | ".join(corrections) if corrections else "Extend arms horizontally"
 
-    elif left_knee_angle < 100 or right_knee_angle < 100:
-        label = 'Tree Pose'
-        color = (255, 255, 0)
+    # 2. Tree Pose (Vrikshasana) Classification & Corrections
+    elif left_knee_angle < 110 or right_knee_angle < 110:
+        bent_knee_angle = left_knee_angle if left_knee_angle < 110 else right_knee_angle
+        straight_knee_angle = right_knee_angle if left_knee_angle < 110 else left_knee_angle
+        bent_leg_name = "Left" if left_knee_angle < 110 else "Right"
+        straight_leg_name = "Right" if left_knee_angle < 110 else "Left"
 
-    elif (80 <= left_knee_angle <= 100 or 80 <= right_knee_angle <= 100) and \
-         (165 <= left_elbow_angle <= 195 and 165 <= right_elbow_angle <= 195):
-        label = 'Warrior Pose'
-        color = (255, 165, 0)
+        if bent_knee_angle <= 90 and straight_knee_angle >= 160:
+            label = "TREE POSE - PERFECT!"
+            feedback = "EXCELLENT BALANCE! (100% Correct)"
+            color = (0, 255, 0) # GREEN when correct
+        else:
+            label = "TREE POSE - ALIGNING"
+            color = (0, 215, 255)
+            corrections = []
+            if bent_knee_angle > 90:
+                corrections.append(f"Tuck {bent_leg_name} Knee IN by {int(bent_knee_angle - 80)}deg")
+            if straight_knee_angle < 160:
+                corrections.append(f"Straighten {straight_leg_name} Standing Leg by {int(175 - straight_knee_angle)}deg")
+            feedback = " | ".join(corrections) if corrections else "Balance on single leg"
 
-    elif hip_angle > 150 and left_knee_angle > 150 and right_knee_angle > 150:
-        label = 'Downward Dog'
-        color = (0, 255, 255)
+    # 3. Warrior Pose (Virabhadrasana)
+    elif (70 <= left_knee_angle <= 110 or 70 <= right_knee_angle <= 110) and (150 <= left_elbow_angle <= 210):
+        front_knee_angle = left_knee_angle if left_knee_angle <= 110 else right_knee_angle
+        front_leg_name = "Left" if left_knee_angle <= 110 else "Right"
 
-    elif 30 <= left_elbow_angle <= 60 and 30 <= right_elbow_angle <= 60 and hip_angle > 150:
-        label = 'Cobra Pose'
-        color = (255, 0, 255)
+        if 85 <= front_knee_angle <= 95 and (165 <= left_elbow_angle <= 195):
+            label = "WARRIOR POSE - PERFECT!"
+            feedback = "STRONG STANCE! (100% Correct)"
+            color = (0, 255, 0) # GREEN
+        else:
+            label = "WARRIOR POSE - ALIGNING"
+            color = (0, 215, 255)
+            if front_knee_angle > 95:
+                feedback = f"Deepen {front_leg_name} Knee Bend DOWN by {int(front_knee_angle - 90)}deg"
+            elif front_knee_angle < 85:
+                feedback = f"Extend {front_leg_name} Knee OUT by {int(90 - front_knee_angle)}deg"
+            else:
+                feedback = "Keep arms level with shoulders"
 
-    elif abs(left_wrist[1] - left_ankle[1]) < 50 or abs(right_wrist[1] - right_ankle[1]) < 50:
-        label = 'Triangle Pose'
-        color = (0, 128, 255)
+    # 4. Downward Dog (Adho Mukha Svanasana)
+    elif hip_angle > 140 and left_knee_angle > 140 and right_knee_angle > 140:
+        if hip_angle >= 160:
+            label = "DOWNWARD DOG - PERFECT!"
+            feedback = "PERFECT V-SHAPE INVERT! (100% Correct)"
+            color = (0, 255, 0) # GREEN
+        else:
+            label = "DOWNWARD DOG - ALIGNING"
+            color = (0, 215, 255)
+            feedback = f"Push Hips UP & Back by {int(170 - hip_angle)}deg"
 
-    # Display pose name
-    cv2.putText(output_image, label, (10, 30), cv2.FONT_HERSHEY_PLAIN, 2, color, 2)
+    # 5. Cobra Pose (Bhujangasana)
+    elif 25 <= left_elbow_angle <= 65 and 25 <= right_elbow_angle <= 65:
+        if 35 <= left_elbow_angle <= 55:
+            label = "COBRA POSE - PERFECT!"
+            feedback = "CHEST LIFTED PERFECTLY! (100% Correct)"
+            color = (0, 255, 0) # GREEN
+        else:
+            label = "COBRA POSE - ALIGNING"
+            color = (0, 215, 255)
+            feedback = f"Adjust Elbow Arch by {int(abs(45 - left_elbow_angle))}deg"
+
+    # Render HUD overlay on video frame
+    h, w, _ = output_image.shape
+    
+    # Top Status Box Banner
+    cv2.rectangle(output_image, (10, 10), (w - 10, 60), (10, 15, 25), -1)
+    cv2.rectangle(output_image, (10, 10), (w - 10, 60), color, 2)
+    cv2.putText(output_image, label, (25, 43), cv2.FONT_HERSHEY_SIMPLEX, 0.85, color, 2)
+
+    # Bottom Feedback Banner
+    cv2.rectangle(output_image, (10, h - 60), (w - 10, h - 10), (10, 15, 25), -1)
+    cv2.rectangle(output_image, (10, h - 60), (w - 10, h - 10), (255, 255, 255), 1)
+    cv2.putText(output_image, f"GUIDANCE: {feedback}", (25, h - 25), cv2.FONT_HERSHEY_SIMPLEX, 0.65, (255, 255, 255), 2)
 
     return output_image, label
 
