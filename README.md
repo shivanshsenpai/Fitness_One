@@ -14,7 +14,8 @@
 
 ### 1. 🧘‍♀️ Real-Time AI Yoga & Posture Coach
 - **Computer Vision Verification**: Uses MediaPipe Pose and OpenCV to track 33 key biometric landmarks in real-time via camera feed.
-- **Angle Calculation & Pose Classification**: Dynamically evaluates joint angles to recognize poses such as *Warrior Pose*, *Tree Pose*, *Cobra Pose*, *Downward Dog*, and *T-Pose Calibration*.
+- **Degree-Level Guidance & Green Indicator**: Calculates exact joint angle deviations (e.g. `Lift Right Arm UP by 27°`), turning **BRIGHT GREEN** when 100% pose alignment is achieved.
+- **Step-by-Step Pose Guides**: Interactive UI cards for *T-Pose*, *Tree Pose*, *Warrior Pose*, *Downward Dog*, and *Cobra Pose*.
 
 ### 2. 🧮 Smart Calorie & Protein Counter
 - **Mifflin-St Jeor Equation**: Computes precise Basal Metabolic Rate (BMR) and Total Daily Energy Expenditure (TDEE).
@@ -31,9 +32,9 @@
 ### 5. 🗺️ Geolocation Sports & Gym Hub Maps
 - **Interactive Sports Finder**: Locate nearby Badminton courts, Cricket pitches, Football grounds, Gyms, Volleyball courts, and Yoga studios on a dark-mode interactive map.
 
-### 6. 🤝 FitMatch Buddy Finder & Real-Time Chat
-- **Schedule-Based Partner Matching**: Connects users who train during identical time slots.
-- **Swipe-Style Lobby & Interactive Chat**: Interactive match card deck and real-time chat interface to coordinate workout sessions.
+### 6. 🤝 Live Multi-User FitMatch & Real-Time Chat
+- **Live Online Visitor Tracking**: Heartbeat API (`/api/user/heartbeat`) tracks online visitors in real-time with a glowing **"ONLINE NOW"** badge.
+- **Instant Match & Live Chat**: Connect with online athletes, send match invites, and exchange real-time messages via Flask REST API endpoints (`/api/chat/send` and `/api/chat/messages`).
 
 ---
 
