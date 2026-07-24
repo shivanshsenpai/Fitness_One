@@ -445,52 +445,64 @@
         const urlParams = new URLSearchParams(window.location.search);
         const buddyName = urlParams.get('user') || 'Gym Buddy';
         const buddyId = urlParams.get('id') || '0';
-
-        // Load User Preference details
-        const defaultUser = { name: "Guest User", age: 24, timeSlot: "8AM-9AM" };
+        
+        // Load User details
+        const defaultUser = { id: 'guest_' + Date.now(), name: "Guest User", age: 24, timeSlot: "8AM-9AM" };
         const user = JSON.parse(localStorage.getItem('user')) || defaultUser;
+        if (!user.id) {
+            user.id = 'user_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6);
+            localStorage.setItem('user', JSON.stringify(user));
+        }
+
+        // Shared Room ID
+        const roomId = urlParams.get('room') || [user.id, buddyId].sort().join('_');
 
         // Set Side Panel Info
         document.getElementById('partnerNameText').innerText = buddyName;
         document.getElementById('partnerHourText').innerText = user.timeSlot;
 
         // Avatar letters & colors
-        const initials = buddyName.charAt(0).toUpperCase();
+        const initials = (buddyName || 'U').charAt(0).toUpperCase();
         document.getElementById('partnerAvatar').innerText = initials;
 
         function getAvatarColor(name) {
             const colors = ['#f87171', '#60a5fa', '#34d399', '#fbbf24', '#a78bfa', '#f472b6', '#22d3ee'];
             let hash = 0;
-            for (let i = 0; i < name.length; i++) {
+            for (let i = 0; i < (name || 'U').length; i++) {
                 hash = name.charCodeAt(i) + ((hash << 5) - hash);
             }
             return colors[Math.abs(hash) % colors.length];
         }
         document.getElementById('partnerAvatar').style.backgroundColor = getAvatarColor(buddyName);
 
-        // Retrieve local chat messages array or seed default ones
-        const chatKey = `chat_history_${buddyId}_${buddyName.replace(/\s+/g, '')}`;
-        let chatMessages = JSON.parse(localStorage.getItem(chatKey)) || [];
-
-        // Seed initial greeting if chat history is empty
-        if (chatMessages.length === 0) {
-            chatMessages = [
-                {
-                    sender: 'buddy',
-                    text: `Hey! Glad we matched. What's your training routine for tomorrow? I saw we both preferred the ${user.timeSlot} slot!`,
-                    time: getFormattedTime(new Date(Date.now() - 3600000)) // 1 hour ago
-                }
-            ];
-            localStorage.setItem(chatKey, JSON.stringify(chatMessages));
+        // Send periodic heartbeat to stay online
+        function sendHeartbeat() {
+            fetch('/api/user/heartbeat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(user)
+            }).catch(() => {});
         }
+        sendHeartbeat();
+        setInterval(sendHeartbeat, 4000);
+
+        // Fallback local key for offline bot testing
+        const chatKey = `chat_history_${roomId}`;
+        let localFallbackMessages = JSON.parse(localStorage.getItem(chatKey)) || [
+            {
+                sender_id: buddyId,
+                sender_name: buddyName,
+                text: `Hey ${user.name}! Glad we matched for the ${user.timeSlot} training slot. Ready to crush today's workout?`,
+                time: getFormattedTime(new Date(Date.now() - 600000))
+            }
+        ];
 
         const botReplies = [
             "Awesome! I'm planning to hit leg day tomorrow, let's crush it together!",
             "That works for me. Meet you by the entrance at 5 minutes before the hour?",
             "Sounds like a solid workout. Ready to push some heavy weight!",
-            "Awesome. Let's do a 5-minute warm-up first and then jump into weights.",
-            "Great! I've been looking for someone to spot me on the bench press.",
-            "Let's meet up and get to training!"
+            "Awesome. Let me know when you arrive!",
+            "Great! Looking forward to training together."
         ];
 
         function getFormattedTime(date) {
@@ -498,87 +510,99 @@
             let minutes = date.getMinutes();
             const ampm = hours >= 12 ? 'PM' : 'AM';
             hours = hours % 12;
-            hours = hours ? hours : 12; // 12 instead of 0
+            hours = hours ? hours : 12;
             minutes = minutes < 10 ? '0' + minutes : minutes;
             return `${hours}:${minutes} ${ampm}`;
         }
 
+        let lastMessageCount = 0;
+
+        // Fetch real-time messages from live Flask backend
+        async function fetchLiveMessages() {
+            try {
+                const res = await fetch(`/api/chat/messages?room_id=${encodeURIComponent(roomId)}`);
+                const data = await res.json();
+                
+                if (data.messages && data.messages.length > 0) {
+                    renderMessageList(data.messages);
+                } else {
+                    renderMessageList(localFallbackMessages);
+                }
+            } catch (err) {
+                renderMessageList(localFallbackMessages);
+            }
+        }
+
         // Render message thread
-        function renderMessages() {
+        function renderMessageList(messagesList) {
             const windowDiv = document.getElementById('messagesWindow');
+            
+            // Avoid re-rendering if unchanged
+            if (messagesList.length === lastMessageCount && windowDiv.children.length > 0) return;
+            lastMessageCount = messagesList.length;
+
             windowDiv.innerHTML = '';
 
-            chatMessages.forEach(msg => {
+            messagesList.forEach(msg => {
+                const isMyMessage = (msg.sender_id === user.id) || (msg.sender === 'user');
                 const bubble = document.createElement('div');
-                bubble.className = `message-bubble ${msg.sender === 'user' ? 'outgoing' : 'incoming'}`;
+                bubble.className = `message-bubble ${isMyMessage ? 'outgoing' : 'incoming'}`;
                 bubble.innerHTML = `
                     <div class="bubble-content">${msg.text}</div>
-                    <div class="bubble-timestamp">${msg.time}</div>
+                    <div class="bubble-timestamp">${msg.time || getFormattedTime(new Date())}</div>
                 `;
                 windowDiv.appendChild(bubble);
             });
 
-            // Scroll to bottom
             windowDiv.scrollTop = windowDiv.scrollHeight;
         }
 
         // Send a message
-        function sendMessage() {
+        async function sendMessage() {
             const input = document.getElementById('messageInput');
             const text = input.value.trim();
             if (text === '') return;
 
-            // Save user message
-            const userMsg = {
-                sender: 'user',
+            const newMsg = {
+                room_id: roomId,
+                sender_id: user.id,
+                sender_name: user.name,
                 text: text,
                 time: getFormattedTime(new Date())
             };
-            chatMessages.push(userMsg);
-            localStorage.setItem(chatKey, JSON.stringify(chatMessages));
-            
-            // Clear input and re-render
-            input.value = '';
-            renderMessages();
 
-            // Trigger typing indicator mock response
-            showTypingIndicator();
+            input.value = '';
+
+            // Try posting to live backend
+            try {
+                await fetch('/api/chat/send', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newMsg)
+                });
+                fetchLiveMessages();
+            } catch (err) {
+                // Fallback for offline bot mode
+                localFallbackMessages.push({ ...newMsg, sender: 'user' });
+                localStorage.setItem(chatKey, JSON.stringify(localFallbackMessages));
+                renderMessageList(localFallbackMessages);
+                triggerBotReply();
+            }
         }
 
-        function showTypingIndicator() {
-            const windowDiv = document.getElementById('messagesWindow');
-            
-            // Create indicator element
-            const indicator = document.createElement('div');
-            indicator.id = 'typingIndicator';
-            indicator.className = 'typing-indicator';
-            indicator.innerHTML = `
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
-            `;
-            windowDiv.appendChild(indicator);
-            windowDiv.scrollTop = windowDiv.scrollHeight;
-
-            // Trigger buddy bot response after delay
+        function triggerBotReply() {
             setTimeout(() => {
-                // Remove indicator
-                const existingIndicator = document.getElementById('typingIndicator');
-                if (existingIndicator) existingIndicator.remove();
-
-                // Select random bot reply
                 const randomReply = botReplies[Math.floor(Math.random() * botReplies.length)];
-
-                const botMsg = {
+                localFallbackMessages.push({
+                    sender_id: buddyId,
+                    sender_name: buddyName,
                     sender: 'buddy',
                     text: randomReply,
                     time: getFormattedTime(new Date())
-                };
-
-                chatMessages.push(botMsg);
-                localStorage.setItem(chatKey, JSON.stringify(chatMessages));
-                renderMessages();
-            }, 1500);
+                });
+                localStorage.setItem(chatKey, JSON.stringify(localFallbackMessages));
+                renderMessageList(localFallbackMessages);
+            }, 1200);
         }
 
         // Handle Enter keypress for inputs
@@ -588,8 +612,9 @@
             }
         });
 
-        // Initialize Chat screen
-        renderMessages();
+        // Initialize Chat screen & start 1.5s live polling interval
+        fetchLiveMessages();
+        setInterval(fetchLiveMessages, 1500);
     </script>
 </body>
 </html>

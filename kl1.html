@@ -54,15 +54,29 @@
     <script>
         document.getElementById('userForm').addEventListener('submit', function (e) {
             e.preventDefault();
-            const name = document.getElementById('name').value;
-            const age = document.getElementById('age').value;
+            const name = document.getElementById('name').value.trim();
+            const age = document.getElementById('age').value.trim();
             const timeSlot = document.getElementById('timeSlot').value;
 
-            // Store user info in localStorage
-            localStorage.setItem('user', JSON.stringify({ name, age, timeSlot }));
+            // Generate or fetch unique persistent User ID
+            const existingUser = JSON.parse(localStorage.getItem('user')) || {};
+            const userId = existingUser.id || ('user_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6));
 
-            // Redirect to matching profiles route in Flask server
-            window.location.href = '/find-friends/matches';
+            const userData = { id: userId, name, age, timeSlot };
+
+            // Store user info in localStorage
+            localStorage.setItem('user', JSON.stringify(userData));
+
+            // Post heartbeat registration to live Flask backend
+            fetch('/api/user/heartbeat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(userData)
+            }).then(() => {
+                window.location.href = '/find-friends/matches';
+            }).catch(() => {
+                window.location.href = '/find-friends/matches';
+            });
         });
     </script>
 </body>

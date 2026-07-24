@@ -262,13 +262,96 @@ def find_friends_matches():
 def chat():
     return render_template('chat.html')
 
+# In-memory Datastores for Real-Time Multi-User Connect & Chat
+import time
+from flask import request
+
+active_users = {}       # user_id -> {id, name, age, timeSlot, last_seen}
+connect_requests = {}   # "from_id:to_id" -> timestamp
+chat_rooms = {}         # room_id -> list of message dicts
+
+# REST API Endpoints for Live Multi-User Lobby & Chat
+@app.route('/api/user/heartbeat', methods=['POST'])
+def user_heartbeat():
+    data = request.get_json() or {}
+    user_id = data.get('id')
+    if not user_id:
+        return jsonify({'error': 'Missing user id'}), 400
+    active_users[user_id] = {
+        'id': user_id,
+        'name': data.get('name', 'Anonymous Athlete'),
+        'age': data.get('age', 24),
+        'timeSlot': data.get('timeSlot', '8AM-9AM'),
+        'last_seen': time.time()
+    }
+    return jsonify({'status': 'ok', 'active_count': len(active_users)})
+
+@app.route('/api/users/active', methods=['GET'])
+def get_active_users():
+    now = time.time()
+    # Filter users active in the last 45 seconds
+    current_online = [
+        user for user_id, user in active_users.items()
+        if now - user['last_seen'] < 45
+    ]
+    return jsonify({'users': current_online})
+
+@app.route('/api/connect', methods=['POST'])
+def connect_users():
+    data = request.get_json() or {}
+    from_id = data.get('from_id')
+    to_id = data.get('to_id')
+    if not from_id or not to_id:
+        return jsonify({'error': 'Missing user IDs'}), 400
+    
+    connect_requests[f"{from_id}:{to_id}"] = time.time()
+    # Canonical room ID sorted alphabetically
+    room_id = "_".join(sorted([str(from_id), str(to_id)]))
+    return jsonify({
+        'status': 'ok',
+        'is_mutual': True,
+        'room_id': room_id
+    })
+
+@app.route('/api/chat/send', methods=['POST'])
+def send_chat_message():
+    data = request.get_json() or {}
+    room_id = data.get('room_id')
+    sender_id = data.get('sender_id')
+    sender_name = data.get('sender_name')
+    text = data.get('text', '').strip()
+    
+    if not room_id or not text:
+        return jsonify({'error': 'Missing room or message text'}), 400
+        
+    if room_id not in chat_rooms:
+        chat_rooms[room_id] = []
+        
+    msg = {
+        'id': len(chat_rooms[room_id]) + 1,
+        'sender_id': sender_id,
+        'sender_name': sender_name,
+        'text': text,
+        'time': time.strftime("%I:%M %p"),
+        'timestamp': time.time()
+    }
+    chat_rooms[room_id].append(msg)
+    return jsonify({'status': 'sent', 'message': msg})
+
+@app.route('/api/chat/messages', methods=['GET'])
+def get_chat_messages():
+    room_id = request.args.get('room_id')
+    if not room_id:
+        return jsonify({'error': 'Missing room_id'}), 400
+    messages = chat_rooms.get(room_id, [])
+    return jsonify({'messages': messages})
+
 @app.route('/yoga-detection')
 def yoga_detection():
     return render_template('templates/index.html')
 
 @app.route('/run-python')
 def run_python():
-    # Legacy endpoint mock response to prevent Javascript errors
     return jsonify({'result': 'Chat loaded locally in browser'})
 
 @app.route('/video_feed')

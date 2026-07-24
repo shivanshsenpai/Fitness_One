@@ -78,41 +78,80 @@
         ];
 
         // Fetch User Preference
-        const defaultUser = { name: "Guest User", age: 24, timeSlot: "8AM-9AM" };
+        const defaultUser = { id: 'guest_' + Date.now(), name: "Guest User", age: 24, timeSlot: "8AM-9AM" };
         const user = JSON.parse(localStorage.getItem('user')) || defaultUser;
+        if (!user.id) {
+            user.id = 'user_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6);
+            localStorage.setItem('user', JSON.stringify(user));
+        }
 
         // Custom avatar background selection based on name hash
         function getAvatarColor(name) {
             const colors = ['#f87171', '#60a5fa', '#34d399', '#fbbf24', '#a78bfa', '#f472b6', '#22d3ee'];
             let hash = 0;
-            for (let i = 0; i < name.length; i++) {
+            for (let i = 0; i < (name || 'U').length; i++) {
                 hash = name.charCodeAt(i) + ((hash << 5) - hash);
             }
             const index = Math.abs(hash) % colors.length;
             return colors[index];
         }
 
-        // Render matching buddy list
-        function displayMatchingProfiles() {
+        // Send periodic heartbeat so backend knows current user is online
+        function sendHeartbeat() {
+            fetch('/api/user/heartbeat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(user)
+            }).catch(() => {});
+        }
+        sendHeartbeat();
+        setInterval(sendHeartbeat, 5000);
+
+        // Fetch & Render matching buddy list (incorporating Real-Time Online Visitors)
+        async function displayMatchingProfiles() {
             const container = document.getElementById('profileContainer');
-            container.innerHTML = '';
 
-            // Filter buddy profiles by preferred hour
-            const matched = profiles.filter(p => p.timeSlot === user.timeSlot);
+            // Fetch live online users from backend
+            let realOnlineUsers = [];
+            try {
+                const res = await fetch('/api/users/active');
+                const data = await res.json();
+                realOnlineUsers = (data.users || []).filter(u => u.id !== user.id);
+            } catch (err) {
+                console.log('Backend polling fallback:', err);
+            }
 
-            if (matched.length === 0) {
+            // Mark real online users with flag
+            const onlineCards = realOnlineUsers.map(u => ({
+                id: u.id,
+                name: u.name,
+                age: u.age,
+                timeSlot: u.timeSlot,
+                isLive: true
+            }));
+
+            // Filter static sample profiles for fallback
+            const sampleCards = profiles
+                .filter(p => p.timeSlot === user.timeSlot && p.id !== user.id)
+                .map(p => ({ ...p, isLive: false }));
+
+            // Combine live online users first, followed by sample cards
+            const allDeck = [...onlineCards, ...sampleCards];
+
+            if (allDeck.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
                         <i class="fa-solid fa-heart-crack empty-icon"></i>
-                        <p>No profiles found training at <strong>${user.timeSlot}</strong>. Try choosing another hours in Lobby.</p>
+                        <p>No profiles found training at <strong>${user.timeSlot}</strong>. Try choosing another hour in Lobby.</p>
                     </div>
                 `;
                 return;
             }
 
-            // Slice top 5 matches
-            matched.slice(0, 5).forEach(buddy => {
-                const initial = buddy.name.charAt(0).toUpperCase();
+            container.innerHTML = '';
+            // Render top cards
+            allDeck.slice(0, 6).forEach(buddy => {
+                const initial = (buddy.name || 'U').charAt(0).toUpperCase();
                 const color = getAvatarColor(buddy.name);
 
                 const card = document.createElement('div');
@@ -126,30 +165,50 @@
                         <h3>${buddy.name}</h3>
                         <p class="age">Age: <span>${buddy.age}</span></p>
                         <p class="hour"><i class="fa-regular fa-clock"></i> <span>${buddy.timeSlot}</span></p>
+                        ${buddy.isLive ? '<span class="live-tag"><i class="fa-solid fa-signal"></i> ONLINE NOW</span>' : ''}
                     </div>
                     <div class="card-buttons">
-                        <button class="btn-action dislike-btn" onclick="dislikeProfile(${buddy.id})"><i class="fa-solid fa-xmark"></i></button>
-                        <button class="btn-action like-btn" onclick="likeProfile(${buddy.id}, '${buddy.name}')"><i class="fa-solid fa-heart"></i></button>
-                        <a id="chatLink-${buddy.id}" href="/chat?user=${encodeURIComponent(buddy.name)}&id=${buddy.id}" class="btn-action chat-btn" style="display:none;"><i class="fa-solid fa-comment"></i> Chat</a>
+                        <button class="btn-action dislike-btn" onclick="dislikeProfile('${buddy.id}')"><i class="fa-solid fa-xmark"></i></button>
+                        <button class="btn-action like-btn" onclick="likeProfile('${buddy.id}', '${buddy.name.replace(/'/g, "\\'")}')"><i class="fa-solid fa-heart"></i></button>
+                        <a id="chatLink-${buddy.id}" href="#" class="btn-action chat-btn" style="display:none;"><i class="fa-solid fa-comment"></i> Chat</a>
                     </div>
                 `;
                 container.appendChild(card);
             });
         }
 
-        // Like profile interaction
-        function likeProfile(id, name) {
+        // Like profile interaction & Real-Time Connect
+        async function likeProfile(id, name) {
+            // Post connect request to live Flask server
+            let roomId = [user.id, id].sort().join('_');
+            try {
+                const res = await fetch('/api/connect', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ from_id: user.id, to_id: id })
+                });
+                const data = await res.json();
+                if (data.room_id) {
+                    roomId = data.room_id;
+                }
+            } catch (e) {
+                console.log('Connect error:', e);
+            }
+
+            const chatUrl = `/chat?room=${roomId}&user=${encodeURIComponent(name)}&id=${id}&me=${encodeURIComponent(user.name)}`;
+
             // Display match popup overlay
             const overlay = document.getElementById('matchOverlay');
             document.getElementById('matchText').innerHTML = `You and <strong>${name}</strong> both train at <strong>${user.timeSlot}</strong>!`;
             
-            // Set link target
-            document.getElementById('overlayChatBtn').href = `/chat?user=${encodeURIComponent(name)}&id=${id}`;
+            // Set link target for chat
+            document.getElementById('overlayChatBtn').href = chatUrl;
             overlay.style.display = 'flex';
 
             // Show local chat button on the card
             const chatLink = document.getElementById(`chatLink-${id}`);
             if (chatLink) {
+                chatLink.href = chatUrl;
                 chatLink.style.display = 'inline-flex';
             }
         }
@@ -167,8 +226,9 @@
             document.getElementById('matchOverlay').style.display = 'none';
         }
 
-        // Initialize matching panel
+        // Initialize matching panel & refresh active list every 6 seconds
         displayMatchingProfiles();
+        setInterval(displayMatchingProfiles, 6000);
     </script>
 </body>
 </html>
