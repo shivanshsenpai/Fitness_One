@@ -80,12 +80,12 @@
 
         /* Main Studio Workspace */
         .studio-container {
-            max-width: 1300px;
-            margin: 2rem auto;
+            max-width: 1400px;
+            margin: 1.8rem auto;
             padding: 0 1.5rem;
             width: 100%;
             display: grid;
-            grid-template-columns: 1fr 380px;
+            grid-template-columns: 1fr 440px;
             gap: 2rem;
             align-items: start;
         }
@@ -142,7 +142,7 @@
         .video-wrapper {
             position: relative;
             width: 100%;
-            height: 520px;
+            height: 560px;
             background: #090d16;
             border-radius: 14px;
             overflow: hidden;
@@ -158,7 +158,7 @@
             object-fit: contain;
         }
 
-        /* Sidebar Guide */
+        /* Sidebar Guide & Side-by-Side Demo Panel */
         .guide-card {
             background: var(--bg-card);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -169,8 +169,8 @@
 
         .guide-card h3 {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+            margin-bottom: 0.4rem;
             color: var(--accent-cyan);
         }
 
@@ -178,37 +178,39 @@
             font-size: 0.85rem;
             color: var(--text-secondary);
             margin-bottom: 1.5rem;
+            line-height: 1.4;
         }
 
         .pose-accordion {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 1.2rem;
         }
 
         .pose-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 14px;
+            border-radius: 16px;
             padding: 1.2rem;
-            transition: all 0.3s ease;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .pose-card:hover {
-            border-color: rgba(0, 240, 255, 0.3);
+            border-color: rgba(0, 240, 255, 0.35);
             background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 25px -10px rgba(0, 240, 255, 0.15);
         }
 
         .pose-card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 0.6rem;
+            margin-bottom: 0.8rem;
         }
 
         .pose-title {
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 1.05rem;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -217,11 +219,48 @@
         .pose-status-pill {
             font-size: 0.7rem;
             font-weight: 700;
-            padding: 0.2rem 0.5rem;
+            padding: 0.25rem 0.6rem;
             border-radius: 6px;
             background: rgba(34, 197, 94, 0.15);
             border: 1px solid rgba(34, 197, 94, 0.3);
             color: #4ade80;
+        }
+
+        /* Demo Picture Frame side-by-side */
+        .pose-demo-img-container {
+            margin: 0.8rem 0;
+            height: 170px;
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            background: #050811;
+            position: relative;
+        }
+
+        .pose-demo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .pose-card:hover .pose-demo-img {
+            transform: scale(1.04);
+        }
+
+        .demo-img-badge {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(8, 12, 20, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--accent-cyan);
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            backdrop-filter: var(--glass-blur);
         }
 
         .pose-steps {
@@ -241,21 +280,26 @@
 
         .target-rule {
             display: inline-block;
-            margin-top: 0.5rem;
+            margin-top: 0.6rem;
             font-size: 0.75rem;
             font-weight: 600;
             color: var(--accent-cyan);
             background: rgba(0, 240, 255, 0.08);
-            padding: 0.2rem 0.6rem;
+            padding: 0.25rem 0.65rem;
             border-radius: 4px;
         }
 
-        @media (max-width: 900px) {
+        .text-cyan { color: var(--accent-cyan); }
+        .text-green { color: #4ade80; }
+        .text-amber { color: #f59e0b; }
+        .text-purple { color: var(--accent-purple); }
+
+        @media (max-width: 1024px) {
             .studio-container {
                 grid-template-columns: 1fr;
             }
             .video-wrapper {
-                height: 360px;
+                height: 400px;
             }
         }
     </style>
@@ -269,6 +313,7 @@
     </header>
 
     <div class="studio-container">
+        <!-- Live AI Camera Viewport (Left) -->
         <main class="viewport-card">
             <div class="camera-header">
                 <h2>MediaPipe AI Pose Verification Feed</h2>
@@ -281,9 +326,10 @@
             </div>
         </main>
 
+        <!-- Side-by-Side Pose Demo Picture & Guidance Panel (Right) -->
         <aside class="guide-card">
-            <h3>Pose Execution & Angle Rules</h3>
-            <p class="guide-subtitle">The HUD frame turns <strong style="color:#22c55e;">GREEN</strong> when pose alignment is 100% perfect, and displays exact degree adjustment commands when aligning.</p>
+            <h3>Pose Execution & Visual Demos</h3>
+            <p class="guide-subtitle">Compare your live camera feed side-by-side with the reference pose illustrations below. The HUD turns <strong style="color:#22c55e;">GREEN</strong> on 100% alignment.</p>
             
             <div class="pose-accordion">
                 <!-- T Pose -->
@@ -292,6 +338,13 @@
                         <span class="pose-title"><i class="fa-solid fa-child-reaching text-cyan"></i> T-Pose</span>
                         <span class="pose-status-pill">GREEN ON 180°</span>
                     </div>
+                    
+                    <!-- Demo Picture -->
+                    <div class="pose-demo-img-container">
+                        <img src="/images/pose_tpose.png" alt="T-Pose Visual Demo" class="pose-demo-img">
+                        <span class="demo-img-badge"><i class="fa-solid fa-image"></i> DEMO REFERENCE</span>
+                    </div>
+
                     <div class="pose-steps">
                         <ol>
                             <li>Stand straight with feet together.</li>
@@ -308,6 +361,13 @@
                         <span class="pose-title"><i class="fa-solid fa-tree text-green"></i> Tree Pose</span>
                         <span class="pose-status-pill">Vrikshasana</span>
                     </div>
+
+                    <!-- Demo Picture -->
+                    <div class="pose-demo-img-container">
+                        <img src="/images/pose_tree.png" alt="Tree Pose Visual Demo" class="pose-demo-img">
+                        <span class="demo-img-badge"><i class="fa-solid fa-image"></i> DEMO REFERENCE</span>
+                    </div>
+
                     <div class="pose-steps">
                         <ol>
                             <li>Balance weight firmly on standing leg.</li>
@@ -324,6 +384,13 @@
                         <span class="pose-title"><i class="fa-solid fa-person-walking text-amber"></i> Warrior Pose</span>
                         <span class="pose-status-pill">Virabhadrasana</span>
                     </div>
+
+                    <!-- Demo Picture -->
+                    <div class="pose-demo-img-container">
+                        <img src="/images/pose_warrior.png" alt="Warrior Pose Visual Demo" class="pose-demo-img">
+                        <span class="demo-img-badge"><i class="fa-solid fa-image"></i> DEMO REFERENCE</span>
+                    </div>
+
                     <div class="pose-steps">
                         <ol>
                             <li>Step feet wide apart (~4 ft).</li>
@@ -340,6 +407,13 @@
                         <span class="pose-title"><i class="fa-solid fa-dog text-purple"></i> Downward Dog</span>
                         <span class="pose-status-pill">Adho Mukha</span>
                     </div>
+
+                    <!-- Demo Picture -->
+                    <div class="pose-demo-img-container">
+                        <img src="/images/pose_downdog.png" alt="Downward Dog Visual Demo" class="pose-demo-img">
+                        <span class="demo-img-badge"><i class="fa-solid fa-image"></i> DEMO REFERENCE</span>
+                    </div>
+
                     <div class="pose-steps">
                         <ol>
                             <li>Form an inverted V-shape with your body.</li>
@@ -356,6 +430,13 @@
                         <span class="pose-title"><i class="fa-solid fa-staff-snake text-cyan"></i> Cobra Pose</span>
                         <span class="pose-status-pill">Bhujangasana</span>
                     </div>
+
+                    <!-- Demo Picture -->
+                    <div class="pose-demo-img-container">
+                        <img src="/images/pose_cobra.png" alt="Cobra Pose Visual Demo" class="pose-demo-img">
+                        <span class="demo-img-badge"><i class="fa-solid fa-image"></i> DEMO REFERENCE</span>
+                    </div>
+
                     <div class="pose-steps">
                         <ol>
                             <li>Lie prone on stomach with legs extended.</li>
