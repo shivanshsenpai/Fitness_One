@@ -43,6 +43,12 @@ body {
     margin-bottom: 1.5rem;
 }
 
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
 .btn-back {
     text-decoration: none;
     color: var(--text-secondary);
@@ -77,6 +83,27 @@ body {
 .btn-print:hover {
     background: rgba(255, 255, 255, 0.1);
     transform: translateY(-2px);
+}
+
+.btn-download {
+    background: var(--accent-gradient);
+    color: #040810;
+    border: none;
+    padding: 0.55rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 15px rgba(0, 240, 255, 0.2);
+}
+
+.btn-download:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 240, 255, 0.35);
 }
 
 .dashboard-header h1 {
