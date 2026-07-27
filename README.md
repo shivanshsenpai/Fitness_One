@@ -17,7 +17,7 @@
 - **Biometric Landmark Tracking**: Employs Google MediaPipe Pose and OpenCV to evaluate 33 full-body joint landmarks in real-time via camera feed.
 - **Degree-Level Angle Guidance**: Calculates exact angular deviations (e.g. `Lift Right Arm UP by 27°`, `Tuck Left Knee IN by 15°`) and displays solid HUD text overlay.
 - **Perfect Alignment Indicator**: Turns the camera HUD **BRIGHT EMERALD GREEN (`#4ADE80`)** when posture hits 100% target alignment.
-- **Step-by-Step Execution Guides**: Interactive sidebar cards detailing angle target rules for *T-Pose*, *Tree Pose (Vrikshasana)*, *Warrior Pose (Virabhadrasana)*, *Downward Dog (Adho Mukha)*, and *Cobra Pose (Bhujangasana)*.
+- **Side-by-Side Demo Reference Illustrations**: High-definition dark cyberpunk pose illustrations (`/images/pose_tpose.png`, `/images/pose_tree.png`, etc.) displayed side-by-side with live camera feed and step-by-step target angle rules.
 
 ### 2. 🤝 Live Multi-User FitMatch & Real-Time Chat
 - **Real-Time Active Visitor Tracking**: Flask heartbeat endpoint (`/api/user/heartbeat`) tracks live online visitors with a glowing **"ONLINE NOW"** badge.
@@ -32,6 +32,7 @@
 
 ### 4. 🥗 Weekly Diet & Meal Planner
 - **Customized Meal Schedules**: Generates 7-day structured nutrition schedules tailored to user-specified target calories and diet preferences (Vegan or Combined).
+- **Downloadable Plain Text (.txt) Export**: Includes a **Download Text (.txt)** button to export formatted 7-day meal schedules, calorie & protein budgets, and recovery tips into a `.txt` file.
 - **High-Contrast Printable Layout**: Clean printable meal dashboard with nutrient breakdown cards.
 
 ### 5. 🍲 High-Protein Recipe Suggester
