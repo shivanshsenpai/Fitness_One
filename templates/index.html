@@ -85,7 +85,7 @@
             padding: 0 1.5rem;
             width: 100%;
             display: grid;
-            grid-template-columns: 1fr 440px;
+            grid-template-columns: 1fr 450px;
             gap: 2rem;
             align-items: start;
         }
@@ -158,7 +158,7 @@
             object-fit: contain;
         }
 
-        /* Sidebar Guide & Side-by-Side Demo Panel */
+        /* Sidebar Swiper Guide Component */
         .guide-card {
             background: var(--bg-card);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -167,38 +167,71 @@
             backdrop-filter: var(--glass-blur);
         }
 
+        .guide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.2rem;
+        }
+
         .guide-card h3 {
             font-family: 'Space Grotesk', sans-serif;
             font-size: 1.25rem;
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.3rem;
             color: var(--accent-cyan);
         }
 
         .guide-subtitle {
-            font-size: 0.85rem;
+            font-size: 0.83rem;
             color: var(--text-secondary);
-            margin-bottom: 1.5rem;
             line-height: 1.4;
         }
 
-        .pose-accordion {
-            display: flex;
-            flex-direction: column;
-            gap: 1.2rem;
+        .carousel-counter {
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.25);
+            color: var(--accent-cyan);
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 0.25rem 0.65rem;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        /* Swiper Container */
+        .pose-swiper-wrapper {
+            position: relative;
+            min-height: 395px;
+            margin-bottom: 1.2rem;
+            overflow: hidden;
+        }
+
+        .pose-slide {
+            display: none;
+            animation: fadeInSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .pose-slide.active {
+            display: block;
+        }
+
+        @keyframes fadeInSlide {
+            from {
+                opacity: 0;
+                transform: translateX(18px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
         }
 
         .pose-card {
             background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(0, 240, 255, 0.2);
             border-radius: 16px;
-            padding: 1.2rem;
-            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .pose-card:hover {
-            border-color: rgba(0, 240, 255, 0.35);
-            background: rgba(255, 255, 255, 0.05);
-            box-shadow: 0 10px 25px -10px rgba(0, 240, 255, 0.15);
+            padding: 1.3rem;
+            box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.5);
         }
 
         .pose-card-header {
@@ -226,10 +259,9 @@
             color: #4ade80;
         }
 
-        /* Demo Picture Frame side-by-side */
         .pose-demo-img-container {
             margin: 0.8rem 0;
-            height: 170px;
+            height: 185px;
             width: 100%;
             border-radius: 12px;
             overflow: hidden;
@@ -264,7 +296,7 @@
         }
 
         .pose-steps {
-            font-size: 0.82rem;
+            font-size: 0.83rem;
             color: var(--text-secondary);
             line-height: 1.5;
         }
@@ -287,6 +319,62 @@
             background: rgba(0, 240, 255, 0.08);
             padding: 0.25rem 0.65rem;
             border-radius: 4px;
+        }
+
+        /* Swiper Navigation Controls */
+        .swiper-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-btn:hover {
+            background: rgba(0, 240, 255, 0.15);
+            border-color: rgba(0, 240, 255, 0.4);
+            color: var(--accent-cyan);
+        }
+
+        .swiper-dots {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot:hover {
+            background: rgba(0, 240, 255, 0.5);
+        }
+
+        .dot.active {
+            width: 20px;
+            border-radius: 10px;
+            background: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
         }
 
         .text-cyan { color: var(--accent-cyan); }
@@ -326,128 +414,204 @@
             </div>
         </main>
 
-        <!-- Side-by-Side Pose Demo Picture & Guidance Panel (Right) -->
+        <!-- Interactive Pose Swiper Card Deck (Right) -->
         <aside class="guide-card">
-            <h3>Pose Execution & Visual Demos</h3>
-            <p class="guide-subtitle">Compare your live camera feed side-by-side with the reference pose illustrations below. The HUD turns <strong style="color:#22c55e;">GREEN</strong> on 100% alignment.</p>
+            <div class="guide-header">
+                <div>
+                    <h3>Pose Execution & Demos</h3>
+                    <p class="guide-subtitle">Use Left (◀) / Right (▶) controls to swap reference target poses.</p>
+                </div>
+                <div class="carousel-counter" id="carouselCounter">1 / 5</div>
+            </div>
             
-            <div class="pose-accordion">
-                <!-- T Pose -->
-                <div class="pose-card">
-                    <div class="pose-card-header">
-                        <span class="pose-title"><i class="fa-solid fa-child-reaching text-cyan"></i> T-Pose</span>
-                        <span class="pose-status-pill">GREEN ON 180°</span>
-                    </div>
-                    
-                    <!-- Demo Picture -->
-                    <div class="pose-demo-img-container">
-                        <img src="/images/pose_tpose.png" alt="T-Pose Visual Demo" class="pose-demo-img">
-                        <span class="demo-img-badge"><i class="fa-solid fa-image"></i> DEMO REFERENCE</span>
-                    </div>
+            <!-- Swiper Slides Container -->
+            <div class="pose-swiper-wrapper" id="poseSwiper">
+                <!-- Slide 1: T Pose -->
+                <div class="pose-slide active">
+                    <div class="pose-card">
+                        <div class="pose-card-header">
+                            <span class="pose-title"><i class="fa-solid fa-child-reaching text-cyan"></i> T-Pose</span>
+                            <span class="pose-status-pill">GREEN ON 180°</span>
+                        </div>
+                        
+                        <div class="pose-demo-img-container">
+                            <img src="/images/pose_tpose.png" alt="T-Pose Visual Demo" class="pose-demo-img">
+                            <span class="demo-img-badge"><i class="fa-solid fa-image"></i> DEMO REFERENCE</span>
+                        </div>
 
-                    <div class="pose-steps">
-                        <ol>
-                            <li>Stand straight with feet together.</li>
-                            <li>Lift both arms laterally until shoulder-height.</li>
-                            <li>Keep elbows straight at 180° horizontal angle.</li>
-                        </ol>
-                        <span class="target-rule">Target: Both Elbows 165° – 195°</span>
+                        <div class="pose-steps">
+                            <ol>
+                                <li>Stand straight with feet together.</li>
+                                <li>Lift both arms laterally until shoulder-height.</li>
+                                <li>Keep elbows straight at 180° horizontal angle.</li>
+                            </ol>
+                            <span class="target-rule">Target: Both Elbows 165° – 195°</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Tree Pose -->
-                <div class="pose-card">
-                    <div class="pose-card-header">
-                        <span class="pose-title"><i class="fa-solid fa-tree text-green"></i> Tree Pose</span>
-                        <span class="pose-status-pill">Vrikshasana</span>
-                    </div>
+                <!-- Slide 2: Tree Pose -->
+                <div class="pose-slide">
+                    <div class="pose-card">
+                        <div class="pose-card-header">
+                            <span class="pose-title"><i class="fa-solid fa-tree text-green"></i> Tree Pose</span>
+                            <span class="pose-status-pill">Vrikshasana</span>
+                        </div>
 
-                    <!-- Demo Picture -->
-                    <div class="pose-demo-img-container">
-                        <img src="/images/pose_tree.png" alt="Tree Pose Visual Demo" class="pose-demo-img">
-                        <span class="demo-img-badge"><i class="fa-solid fa-image"></i> DEMO REFERENCE</span>
-                    </div>
+                        <div class="pose-demo-img-container">
+                            <img src="/images/pose_tree.png" alt="Tree Pose Visual Demo" class="pose-demo-img">
+                            <span class="demo-img-badge"><i class="fa-solid fa-image"></i> DEMO REFERENCE</span>
+                        </div>
 
-                    <div class="pose-steps">
-                        <ol>
-                            <li>Balance weight firmly on standing leg.</li>
-                            <li>Lift opposite foot and place on inner thigh.</li>
-                            <li>Keep standing knee locked at 180°.</li>
-                        </ol>
-                        <span class="target-rule">Target: Bent Knee ≤ 90°, Standing Knee ≥ 160°</span>
-                    </div>
-                </div>
-
-                <!-- Warrior Pose -->
-                <div class="pose-card">
-                    <div class="pose-card-header">
-                        <span class="pose-title"><i class="fa-solid fa-person-walking text-amber"></i> Warrior Pose</span>
-                        <span class="pose-status-pill">Virabhadrasana</span>
-                    </div>
-
-                    <!-- Demo Picture -->
-                    <div class="pose-demo-img-container">
-                        <img src="/images/pose_warrior.png" alt="Warrior Pose Visual Demo" class="pose-demo-img">
-                        <span class="demo-img-badge"><i class="fa-solid fa-image"></i> DEMO REFERENCE</span>
-                    </div>
-
-                    <div class="pose-steps">
-                        <ol>
-                            <li>Step feet wide apart (~4 ft).</li>
-                            <li>Lunge front leg until knee forms 90° angle.</li>
-                            <li>Extend arms parallel to floor.</li>
-                        </ol>
-                        <span class="target-rule">Target: Front Knee 85° – 95°</span>
+                        <div class="pose-steps">
+                            <ol>
+                                <li>Balance weight firmly on standing leg.</li>
+                                <li>Lift opposite foot and place on inner thigh.</li>
+                                <li>Keep standing knee locked at 180°.</li>
+                            </ol>
+                            <span class="target-rule">Target: Bent Knee ≤ 90°, Standing Knee ≥ 160°</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Downward Dog -->
-                <div class="pose-card">
-                    <div class="pose-card-header">
-                        <span class="pose-title"><i class="fa-solid fa-dog text-purple"></i> Downward Dog</span>
-                        <span class="pose-status-pill">Adho Mukha</span>
-                    </div>
+                <!-- Slide 3: Warrior Pose -->
+                <div class="pose-slide">
+                    <div class="pose-card">
+                        <div class="pose-card-header">
+                            <span class="pose-title"><i class="fa-solid fa-person-walking text-amber"></i> Warrior Pose</span>
+                            <span class="pose-status-pill">Virabhadrasana</span>
+                        </div>
 
-                    <!-- Demo Picture -->
-                    <div class="pose-demo-img-container">
-                        <img src="/images/pose_downdog.png" alt="Downward Dog Visual Demo" class="pose-demo-img">
-                        <span class="demo-img-badge"><i class="fa-solid fa-image"></i> DEMO REFERENCE</span>
-                    </div>
+                        <div class="pose-demo-img-container">
+                            <img src="/images/pose_warrior.png" alt="Warrior Pose Visual Demo" class="pose-demo-img">
+                            <span class="demo-img-badge"><i class="fa-solid fa-image"></i> DEMO REFERENCE</span>
+                        </div>
 
-                    <div class="pose-steps">
-                        <ol>
-                            <li>Form an inverted V-shape with your body.</li>
-                            <li>Press palms firmly into mat.</li>
-                            <li>Push hips upward & back.</li>
-                        </ol>
-                        <span class="target-rule">Target: Hip Angle ≥ 160°</span>
+                        <div class="pose-steps">
+                            <ol>
+                                <li>Step feet wide apart (~4 ft).</li>
+                                <li>Lunge front leg until knee forms 90° angle.</li>
+                                <li>Extend arms parallel to floor.</li>
+                            </ol>
+                            <span class="target-rule">Target: Front Knee 85° – 95°</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Cobra Pose -->
-                <div class="pose-card">
-                    <div class="pose-card-header">
-                        <span class="pose-title"><i class="fa-solid fa-staff-snake text-cyan"></i> Cobra Pose</span>
-                        <span class="pose-status-pill">Bhujangasana</span>
-                    </div>
+                <!-- Slide 4: Downward Dog -->
+                <div class="pose-slide">
+                    <div class="pose-card">
+                        <div class="pose-card-header">
+                            <span class="pose-title"><i class="fa-solid fa-dog text-purple"></i> Downward Dog</span>
+                            <span class="pose-status-pill">Adho Mukha</span>
+                        </div>
 
-                    <!-- Demo Picture -->
-                    <div class="pose-demo-img-container">
-                        <img src="/images/pose_cobra.png" alt="Cobra Pose Visual Demo" class="pose-demo-img">
-                        <span class="demo-img-badge"><i class="fa-solid fa-image"></i> DEMO REFERENCE</span>
-                    </div>
+                        <div class="pose-demo-img-container">
+                            <img src="/images/pose_downdog.png" alt="Downward Dog Visual Demo" class="pose-demo-img">
+                            <span class="demo-img-badge"><i class="fa-solid fa-image"></i> DEMO REFERENCE</span>
+                        </div>
 
-                    <div class="pose-steps">
-                        <ol>
-                            <li>Lie prone on stomach with legs extended.</li>
-                            <li>Place palms under shoulders & lift chest.</li>
-                            <li>Keep soft bend in elbows (~45°).</li>
-                        </ol>
-                        <span class="target-rule">Target: Elbow Arch 35° – 55°</span>
+                        <div class="pose-steps">
+                            <ol>
+                                <li>Form an inverted V-shape with your body.</li>
+                                <li>Press palms firmly into mat.</li>
+                                <li>Push hips upward & back.</li>
+                            </ol>
+                            <span class="target-rule">Target: Hip Angle ≥ 160°</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 5: Cobra Pose -->
+                <div class="pose-slide">
+                    <div class="pose-card">
+                        <div class="pose-card-header">
+                            <span class="pose-title"><i class="fa-solid fa-staff-snake text-cyan"></i> Cobra Pose</span>
+                            <span class="pose-status-pill">Bhujangasana</span>
+                        </div>
+
+                        <div class="pose-demo-img-container">
+                            <img src="/images/pose_cobra.png" alt="Cobra Pose Visual Demo" class="pose-demo-img">
+                            <span class="demo-img-badge"><i class="fa-solid fa-image"></i> DEMO REFERENCE</span>
+                        </div>
+
+                        <div class="pose-steps">
+                            <ol>
+                                <li>Lie prone on stomach with legs extended.</li>
+                                <li>Place palms under shoulders & lift chest.</li>
+                                <li>Keep soft bend in elbows (~45°).</li>
+                            </ol>
+                            <span class="target-rule">Target: Elbow Arch 35° – 55°</span>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Navigation Controls Footer -->
+            <div class="swiper-controls">
+                <button class="nav-btn prev-btn" id="prevPoseBtn" onclick="navigatePose(-1)"><i class="fa-solid fa-chevron-left"></i> Prev</button>
+                
+                <div class="swiper-dots" id="swiperDots">
+                    <span class="dot active" onclick="goToPose(0)"></span>
+                    <span class="dot" onclick="goToPose(1)"></span>
+                    <span class="dot" onclick="goToPose(2)"></span>
+                    <span class="dot" onclick="goToPose(3)"></span>
+                    <span class="dot" onclick="goToPose(4)"></span>
+                </div>
+
+                <button class="nav-btn next-btn" id="nextPoseBtn" onclick="navigatePose(1)">Next <i class="fa-solid fa-chevron-right"></i></button>
+            </div>
         </aside>
     </div>
+
+    <script>
+        let currentPoseIndex = 0;
+        const slides = document.querySelectorAll('.pose-slide');
+        const dots = document.querySelectorAll('.dot');
+        const counter = document.getElementById('carouselCounter');
+
+        function updateSwiperView() {
+            slides.forEach((slide, idx) => {
+                slide.classList.toggle('active', idx === currentPoseIndex);
+            });
+            dots.forEach((dot, idx) => {
+                dot.classList.toggle('active', idx === currentPoseIndex);
+            });
+            if (counter) {
+                counter.innerText = `${currentPoseIndex + 1} / ${slides.length}`;
+            }
+        }
+
+        function navigatePose(direction) {
+            currentPoseIndex = (currentPoseIndex + direction + slides.length) % slides.length;
+            updateSwiperView();
+        }
+
+        function goToPose(index) {
+            currentPoseIndex = index;
+            updateSwiperView();
+        }
+
+        // Keyboard Arrow Key Navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') navigatePose(-1);
+            if (e.key === 'ArrowRight') navigatePose(1);
+        });
+
+        // Touch Swipe Gesture Support
+        let touchStartX = 0;
+        const swiperElem = document.getElementById('poseSwiper');
+        if (swiperElem) {
+            swiperElem.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            swiperElem.addEventListener('touchend', (e) => {
+                const touchEndX = e.changedTouches[0].screenX;
+                if (touchStartX - touchEndX > 40) navigatePose(1); // Swipe Left -> Next
+                if (touchEndX - touchStartX > 40) navigatePose(-1); // Swipe Right -> Prev
+            }, { passive: true });
+        }
+    </script>
 </body>
 </html>
